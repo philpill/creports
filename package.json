@@ -1,0 +1,12 @@
+{
+  "name": "thatbloodygame-grid",
+  "description": "grid",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "jade": "^1.9.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10"
+  }
+}

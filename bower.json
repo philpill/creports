@@ -1,0 +1,25 @@
+{
+  "name": "grid",
+  "version": "0.0.0",
+  "homepage": "https://github.com/philpill/js-grid",
+  "authors": [
+    "philpill <github@philpill.net>"
+  ],
+  "main": "app.js",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": null,
+    "d3": null,
+    "datamaps": null
+  }
+}
