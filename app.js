@@ -4,7 +4,6 @@ var app = express();
 app.set('views', './views');
 app.set('view engine', 'jade');
 
-app.use('/bower', express.static(__dirname + '/bower_components'));
 app.use('/static', express.static(__dirname + '/static'));
 
 app.get('/', function(req, res) {

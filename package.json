@@ -3,10 +3,43 @@
   "description": "grid",
   "version": "0.0.1",
   "private": true,
+  "ref": [
+    "https://github.com/substack/node-browserify#browser-field",
+    "https://github.com/thlorenz/browserify-shim#multi-shim-example-including-dependencies"
+  ],
+  "browser": {
+    "jquery": "./bower_components/jquery/dist/jquery.min.js",
+    "topojson": "./bower_components/topojson/topojson.js",
+    "d3": "./bower_components/d3/d3.min.js",
+    "datamaps": "./bower_components/datamaps/dist/datamaps.all.js"
+  },
+  "browserify-shim": {
+    "jquery": "$",
+    "d3": "d3",
+    "topojson": "topojson",
+    "datamaps": {
+      "depends": [
+        "d3",
+        "topojson"
+      ]
+    }
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
   "dependencies": {
     "jade": "^1.9.1"
   },
   "devDependencies": {
-    "gulp": "^3.8.10"
+    "browserify": "^8.1.1",
+    "browserify-shim": "^3.2.0",
+    "gulp": "^3.8.10",
+    "gulp-batch": "^1.0.4",
+    "gulp-uglify": "^1.1.0",
+    "gulp-watch": "^1.0.4",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.0.0"
   }
 }
