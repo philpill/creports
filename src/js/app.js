@@ -1,13 +1,15 @@
-(function () {
+(function (document) {
 
     var $ = require('jquery.min');
-    var datamaps = require('datamaps.all');
+    require('d3');
+    require('topojson');
+    require('datamaps.all');
 
     function init () {
 
-        console.log('test');
+        var map = new Datamap({element: document.getElementById('Container')});
     }
 
     init();
 
-})();
+})(document);

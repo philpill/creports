@@ -5,13 +5,15 @@ var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 var watch = require('gulp-watch');
 var batch = require('gulp-batch');
+var sass = require('gulp-sass');
 
 var PATH = {
     input : './src/js/app.js',
     outputPath : './static/js/',
     outputFile : 'grid.js',
     lib : './bower_components/',
-    watchGlob : ['src/js/**', 'bower_components/**']
+    watchJS : ['src/js/**', 'bower_components/**'],
+    watchSCSS : 'src/scss/**',
 }
 
 var libs = [
@@ -22,9 +24,18 @@ var libs = [
 ];
 
 gulp.task('watch', function () {
-    watch(PATH.watchGlob, function () {
+    watch(PATH.watchJS, function () {
         gulp.start('browserify');
     });
+    watch(PATH.watchSCSS, function () {
+        gulp.start('sass');
+    });
+});
+
+gulp.task('sass', function () {
+    gulp.src(PATH.watchSCSS)
+        .pipe(sass())
+        .pipe(gulp.dest('./static/css'));
 });
 
 gulp.task('default', ['watch']);
