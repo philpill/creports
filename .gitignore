@@ -29,3 +29,4 @@ node_modules
 
 # Junk files
 .DS_Store
+*.swp
