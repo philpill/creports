@@ -1,7 +1,10 @@
 var express = require('express');
 var app = express();
 var q = require('q');
-var scraper = require('./scraper');
+
+var scrape = require('./scraper.scrape');
+var format = require('./scraper.format');
+var persist = require('./scraper.persist');
 
 app.set('views', './views');
 app.set('view engine', 'jade');
@@ -10,12 +13,14 @@ app.use('/static', express.static(__dirname + '/static'));
 
 app.get('/', function(req, res) {
 
-  // scraper.scrape()
-  // .then(function () {
+  scrape()
+  .then(format)
+  .then(persist)
+  .then(function () {
 
     res.render('index', { title: 'Hey' });
-  
-  // });
+
+  });
 
 });
 
