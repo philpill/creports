@@ -10,13 +10,12 @@ app.use('/static', express.static(__dirname + '/static'));
 
 app.get('/', function(req, res) {
 
-    scraper.scrape()
-    .then(function (title) {
+  // scraper.scrape()
+  // .then(function () {
 
-        res.render('index', { title: 'Hey', message: title });
-    });
-
-
+    res.render('index', { title: 'Hey' });
+  
+  // });
 
 });
 

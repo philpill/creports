@@ -1,11 +1,11 @@
-var gulp = require('gulp');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
-var watch = require('gulp-watch');
-var batch = require('gulp-batch');
-var sass = require('gulp-sass');
+var gulp = require('gulp'),
+    browserify = require('browserify'),
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
+    uglify = require('gulp-uglify'),
+    watch = require('gulp-watch'),
+    batch = require('gulp-batch'),
+    sass = require('gulp-sass');
 
 var PATH = {
     input : './src/js/app.js',
@@ -46,6 +46,6 @@ gulp.task('browserify', function() {
         .bundle()
         .pipe(source(PATH.outputFile))
         .pipe(buffer())
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest(PATH.outputPath))
 });

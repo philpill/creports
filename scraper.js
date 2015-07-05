@@ -4,98 +4,114 @@ var q = require('q');
 
 function init () {
 
-    console.log('scraper.init()');
+  console.log('scraper.init()');
 }
 
 function getFeed () {
 
-    var deferred = q.defer();
+  var deferred = q.defer();
 
-    request('http://feeds.bbci.co.uk/news/world/rss.xml', function (error, response, html) {
+  request('http://feeds.bbci.co.uk/news/world/rss.xml', function (error, response, html) {
 
-        if (!error && response.statusCode === 200) {
+    if (!error && response.statusCode === 200) {
 
-            var promises = [];
+      var promises = [];
 
-            var $ = cheerio.load(html, {
-                xmlMode: true
-            });
+      var $ = cheerio.load(html, {
+        xmlMode: true
+      });
 
-            var $links = $('channel > item > link');
+      var $links = $('channel > item > link');
 
-            var l = $links.length;
+      var l = $links.length;
 
-            for (var i = 0; i < l; i++) {
+      for (var i = 0; i < l; i++) {
 
-                promises[i] = getArticle($links.eq(i).text());
-            }
+        promises[i] = getArticle($links.eq(i).text());
+      }
 
-            q.all(promises).spread(function () {
+      q.allSettled(promises).then(function (results) {
 
-                console.log([].slice.call(arguments));
+        processArticles(results);
+ 
+        deferred.resolve();
+      });
+    }
+  });
 
-                deferred.resolve();
-            });
-        }
-    });
+  return deferred.promise;
+}
 
-    return deferred.promise;
+function processArticles (articles) {
+ 
+  articles.forEach(function (article) {
+                    
+    if (article.state === "fulfilled") {
+        
+      console.log(article.value);
+                    
+    } else {
+     
+      console.log('error');                   
+    }          
+      
+  });
 }
 
 function getArticle (url) {
 
-    var deferred = q.defer();
+  var deferred = q.defer();
 
-    request(url, function (error, response, html) {
-        if (!error && response.statusCode === 200) {
+  request(url, function (error, response, html) {
+    
+    if (!error && response.statusCode === 200) {
 
-            // console.log(url);
+      console.log(url);
 
-            var $ = cheerio.load(html);
+      var $ = cheerio.load(html);
 
-            var $headline = $('.story-header, .story-body__h1, .article p.introduction');
+      var $headline = $('.story-header, .story-body__h1, .article p.introduction');
 
-            if ($headline.length > 0) {
+      if ($headline.length > 0) {
 
-                $headline.filter(function(){
+        $headline.filter(function(){
 
-                    var data = $(this);
+          var data = $(this);
 
-                    var title = data.text().trim();
+          var title = data.text().trim();
 
-                    // console.log(title);
+          deferred.resolve(title);
 
-                    deferred.resolve(title);
-                });
+        });
 
-            } else {
+      } else {
 
-                deferred.reject();
-            }
+        deferred.reject();
+      }
 
-        }
-    });
+    }
+  });
 
-    return deferred.promise;
+  return deferred.promise;
 }
 
 function scrape () {
 
-    console.log('scraper.scrape()');
+  console.log('scraper.scrape()');
 
-    var deferred = q.defer();
+  var deferred = q.defer();
 
-    getFeed().then(function () {
+  getFeed().then(function () {
 
-        deferred.resolve();
-    });
+    deferred.resolve();
+  });
 
-    return deferred.promise;
+  return deferred.promise;
 }
 
 
 
 module.exports = {
 
-    scrape : scrape
+  scrape : scrape
 };
