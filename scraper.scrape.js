@@ -1,5 +1,5 @@
 var request = require('request');
-var cheerio = require('cheerio');
+var $ = cheerio = require('cheerio'); // seems a bit dumb, but required to load xml
 var q = require('q');
 
 function scrape () {
@@ -21,11 +21,11 @@ function getFeed (url) {
 
   var deferred = q.defer();
 
-  request(url, function (error, response, html) {
+  request(url, function (error, response, body) {
 
     if (!error && response.statusCode === 200) {
 
-        deferred.resolve(html);
+        deferred.resolve(body);
 
     } else {
 
@@ -34,84 +34,70 @@ function getFeed (url) {
   });
 
   return deferred.promise;
-
 }
 
+/**
+ * Filter article URLs from HTML
+ * @param {String} html HTML request response body
+ * @return {Array.String} array of article URLs
+ */
 function getArticleUrls (html) {
 
     console.log('getArticleUrls()');
 
-  var $ = cheerio.load(html, {
-    xmlMode: true
-  });
+    var urls = [];
+    var $$ = cheerio.load(html, { xmlMode: true });
 
-  return q($('channel > item > link'));
+    $$('channel > item > link').each(function (index, el) {
+        urls.push($(el).text());
+    });
 
+    return urls;
 }
 
-function getArticles ($urls) {
+/**
+ * Get articles from list of URLs
+ * @param {Array.String} urls list of article URLs
+ * @return {Object} q.promise
+ */
+function getArticles (urls) {
 
     console.log('getArticles()');
 
-    var deferred = q.defer();
-
     var promises = [];
 
-    var l = $urls.length;
+    urls.forEach(function (url) {
 
-    for (var i = 0; i < l; i++) {
-
-        promises[i] = getArticle($urls.eq(i).text());
-    }
-
-  q.allSettled(promises).then(function (articles) {
-
-        deferred.resolve(articles);
-
+        promises.push(getArticle(url));
     });
 
-  return deferred.promise;
-
+    return q.allSettled(promises);
 }
 
+/**
+ * Get the HTML for the url provided
+ * @param {String} url Article URL
+ * @return {Object} q.promise
+ */
 function getArticle (url) {
+
     console.log('getArticle()');
 
     console.log(url);
 
-  var deferred = q.defer();
+    var deferred = q.defer();
 
-  request(url, function (error, response, html) {
+    request(url, function (error, response, body) {
 
-    if (!error && response.statusCode === 200) {
+        var isOk = !error && response.statusCode === 200;
 
-      console.log(url);
+        body = isOk ? body : '';
 
-      var $ = cheerio.load(html);
+        deferred.resolve(body);
 
-      var $headline = $('.story-header, .story-body__h1, .article p.introduction');
+    });
 
-      if ($headline.length > 0) {
-
-        $headline.filter(function(){
-
-          var data = $(this);
-
-          var title = data.text().trim();
-
-          deferred.resolve(title);
-
-        });
-
-      } else {
-
-        deferred.reject();
-      }
-
-    }
-  });
-
-  return deferred.promise;
+    return deferred.promise;
 }
 
 module.exports = scrape;
