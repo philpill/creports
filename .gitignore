@@ -34,3 +34,6 @@ node_modules
 # Build files
 bower_components/
 static/
+
+# Config files
+config.js
