@@ -12,15 +12,36 @@ function format (states) {
 
     var l = states.length;
 
+    var data;
+
+    var article;
+
     for (var i = 0; i < l; i++) {
 
-        if (states[i].value) {
+        data = states[i] && states[i].value ? states[i].value : null;
 
-            articles.push(formatArticle(states[i].value));
+        if (data) {
+
+            article = formatArticle(data);
+
+            articles.push(article);
         }
     }
 
     return q(articles);
+}
+
+function Article (params) {
+
+    this.url = params.url;
+    this.data = {
+        headline : params.headline,
+        story : params.story
+    };
+    this.analysis = {
+        categories : {},
+        locations : {}
+    };
 }
 
 function formatArticle (data) {
@@ -29,20 +50,26 @@ function formatArticle (data) {
 
     var article;
 
-    var $ = cheerio.load(data);
+    var $ = cheerio.load(data.body);
 
     var $headline = $('.story-header, .story-body__h1, .article p.introduction');
 
+    var $story = $('.story-body .story-body__inner p');
+
     if ($headline.length > 0) {
 
-        article = $headline.text().trim();
+        // create proper article object here
+
+        article = new Article({
+            url : data.url,
+            headline : $headline.text().trim(),
+            story : $story.text().trim()
+        });
 
         console.log(article);
     }
 
     return article;
 }
-
-
 
 module.exports = format;

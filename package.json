@@ -30,7 +30,8 @@
     ]
   },
   "dependencies": {
-    "jade": "*"
+    "jade": "*",
+    "aylien_textapi": "*"
   },
   "devDependencies": {
     "bower": "*",

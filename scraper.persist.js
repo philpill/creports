@@ -4,7 +4,7 @@ function persist (articles) {
 
   console.log('scraper.persist()');
 
-  console.log(articles.length);
+  console.log(articles);
 
 
   return q();

@@ -1,6 +1,7 @@
 var request = require('request');
 var $ = cheerio = require('cheerio'); // seems a bit dumb, but required to load xml
 var q = require('q');
+var ARTICLE_SCRAPE_LIMIT = 10;
 
 function scrape () {
 
@@ -49,7 +50,11 @@ function getArticleUrls (html) {
     var $$ = cheerio.load(html, { xmlMode: true });
 
     $$('channel > item > link').each(function (index, el) {
-        urls.push($(el).text());
+        if (urls.length < ARTICLE_SCRAPE_LIMIT) {
+            urls.push($(el).text());
+        } else {
+            return false;
+        }
     });
 
     return urls;
@@ -93,7 +98,10 @@ function getArticle (url) {
 
         body = isOk ? body : '';
 
-        deferred.resolve(body);
+        deferred.resolve({
+            url : url,
+            body : body
+        });
 
     });
 

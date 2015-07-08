@@ -5,6 +5,7 @@ var q = require('q');
 var scrape = require('./scraper.scrape');
 var format = require('./scraper.format');
 var persist = require('./scraper.persist');
+var analyse = require('./scraper.analyse');
 
 app.set('views', './views');
 app.set('view engine', 'jade');
@@ -15,6 +16,7 @@ app.get('/', function(req, res) {
 
   scrape()
   .then(format)
+  .then(analyse)
   .then(persist)
   .then(function () {
 
