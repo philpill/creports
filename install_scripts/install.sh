@@ -37,9 +37,9 @@ function createDatabase {
 #http://stackoverflow.com/a/16783253
 function verifyDatabase {
     echo "- verifying postgres"
-    if psql -U postgres -lqt | cut -d \| -f 1 | grep -w "$db"; then    
+    if psql -U postgres -lqt | cut -d \| -f 1 | grep -w "$db"; then
         echo "- database verified"
-        createTables   
+        createTables
     else
         echo "- database not found"
         createDatabase
@@ -49,7 +49,7 @@ function verifyDatabase {
 
 function createTables {
     echo "- creating tables"
-    psql -U postgres --quiet --single-transaction --set AUTOCOMMIT=off --set ON_ERROR_STOP=on -f 'install_scripts/install.sql' $db
+    psql -U postgres --quiet --single-transaction --set AUTOCOMMIT=off --set ON_ERROR_STOP=on -f './install.sql' $db
 }
 
 init

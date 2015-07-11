@@ -16,6 +16,13 @@ var api = new aylienApi({ application_id: id, application_key: key });
     code: '16007000',
     confidence: 1 } ]
 
+[ { label: 'unrest, conflicts and war - act of terror',
+    code: '16001000',
+    confidence: 1 } ]
+
+[ { label: 'guerrilla activity - bombings',
+    code: '16005002',
+    confidence: 1 } ]
 
 */
 

@@ -1,0 +1,3 @@
+[submodule "vendor/CountriesToCitiesJSON"]
+	path = vendor/CountriesToCitiesJSON
+	url = git@github.com:philpill/CountriesToCitiesJSON.git
