@@ -1,6 +1,6 @@
 var aylienApi = require('aylien_textapi');
 var q = require('q');
-var config = require('./config');
+var config = require('../config');
 
 var id = config.aylien.id;
 var key = config.aylien.key;
@@ -46,6 +46,8 @@ function getClassification (story) {
 
 function getLocations (story) {
 
+    var deferred = q.defer();
+
     api.entities({
 
         text : story
@@ -63,6 +65,8 @@ function getLocations (story) {
             deferred.resolve(response.entities.location);
         }
     });
+
+    return deferred.promise;
 }
 
 function aylien (article) {
@@ -79,16 +83,16 @@ function aylien (article) {
 
         article.analysis.classification = classification;
 
-        defer.resolve(article);
+        deferred.resolve(article);
 
     }, function (error) {
 
         console.log(error);
 
-        defer.reject();
+        deferred.reject(error);
     });
 
-    return defer.promise;
+    return deferred.promise;
 }
 
 module.exports = aylien;

@@ -1,5 +1,5 @@
 var q = require('q');
-var aylien = require('./scraper.analyse.aylien');
+var aylien = require('./article.analyse.aylien');
 
 function analyse (articles) {
 

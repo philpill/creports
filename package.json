@@ -30,8 +30,11 @@
     ]
   },
   "dependencies": {
+    "aylien_textapi": "*",
     "jade": "*",
-    "aylien_textapi": "*"
+    "pg": "^4.4.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.3.2"
   },
   "devDependencies": {
     "bower": "*",
