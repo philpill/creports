@@ -49,7 +49,7 @@ function verifyDatabase {
 
 function createTables {
     echo "- creating tables"
-    psql -U postgres --quiet --single-transaction --set AUTOCOMMIT=off --set ON_ERROR_STOP=on -f './install.sql' $db
+    psql -U postgres --quiet --single-transaction --set AUTOCOMMIT=off --set ON_ERROR_STOP=on -f './postgres.sql' $db
 }
 
 init

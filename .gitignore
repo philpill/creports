@@ -34,3 +34,6 @@ node_modules
 # Build files
 bower_components/
 static/
+
+# DB files
+data/
