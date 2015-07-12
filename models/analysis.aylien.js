@@ -30,9 +30,9 @@ var api = new aylienApi({ application_id: id, application_key: key });
 
 */
 
-function getClassification (story) {
+function getClassifications (story) {
 
-    // console.log('analysis.aylien.getClassification()');
+    // console.log('analysis.aylien.getClassifications()');
 
     var dfd = q.defer();
 
@@ -63,6 +63,11 @@ function getLocations (story) {
 
     var dfd = q.defer();
 
+    if (!story) {
+
+        dfd.resolve();
+    }
+
     api.entities({
 
         text : story
@@ -70,6 +75,8 @@ function getLocations (story) {
     }, function(error, response) {
 
         if (error) {
+
+            console.log('error ', error);
 
             dfd.reject(error);
 
@@ -84,16 +91,6 @@ function getLocations (story) {
     return dfd.promise;
 }
 
-// http://cv.iptc.org/newscodes/subjectcode/16000000
-function isConflict (classification) {
-
-    var code = classification[0].code;
-
-    var regex = /^160[0-9]*/;
-
-    return regex.test(code);
-}
-
 function analyse () {
 
     // console.log('analysis.aylien.analyse()');
@@ -104,19 +101,19 @@ function analyse () {
 
     var story = this.data.story;
 
-    q.spread([getClassification(story), getLocations(story)], function (classification, locations) {
+    q.spread([getClassifications(story), getLocations(story)], function (classifications, locations) {
 
         article.analysis.locations = locations;
 
-        article.analysis.classification = classification;
-
-        article.analysis.isWar = isConflict(classification)
+        article.analysis.classifications = classifications;
 
         dfd.resolve(article);
 
     }, function (error) {
 
-        console.log(error);
+        console.log('error ', error);
+
+        console.log('url ', article.url);
 
         dfd.reject(error);
     });

@@ -2,25 +2,28 @@ var request = require('request'),
     $ = cheerio = require('cheerio'),
     q = require('q'),
     config = require('../config'),
-    analyse = require('./analysis.' + config.analyser.api);
+    analyse = require('./analysis.' + config.analyser.api),
+    countries = require('../vendor/CountriesToCitiesJSON/countriesToCities');
 
 var Article = function (url, headlineSelector, storySelector) {
 
     this.url = url;
     this.headlineSelector = headlineSelector;
     this.storySelector = storySelector;
+    this.isConflict = false;
+    this.countries = [];
+    this.cities = [];
 
     this.analysis = {
-        location : [],
-        classification : [],
-        isWar : false
+        locations : [],
+        classifications : []
     };
     this.data = {};
 }
 
 Article.prototype.scrape = function () {
 
-    console.log('scrape()');
+    // console.log('scrape()');
 
     var dfd = q.defer();
 
@@ -38,9 +41,7 @@ Article.prototype.scrape = function () {
 
 Article.prototype.format = function (body) {
 
-    // console.log('formatArticle()');
-
-    var article;
+    // console.log('format()');
 
     var $ = cheerio.load(body);
 
@@ -57,9 +58,81 @@ Article.prototype.format = function (body) {
         this.data.story = $story.text().trim();
     }
 
-    return q(article);
+    return q();
+};
+
+Article.prototype.interpret = function () {
+
+    // console.log('interpret()');
+
+    var article = this;
+
+    // http://cv.iptc.org/newscodes/subjectcode/16000000
+    function isConflict (classifications) {
+        var isConflict = false;
+        var regex = /^160[0-9]*/;
+        classifications.forEach(function (classification) {
+            if (regex.test(classification.code)) {
+                isConflict = true;
+                return false;
+            }
+        });
+        return isConflict;
+    }
+
+    function getCountries () {
+        // console.log('getCountries()');
+        article.analysis.locations.forEach(function (location) {
+            Object.keys(countries).forEach(function (country) {
+                if (location.toLowerCase() === country.toLowerCase()) {
+
+                    console.log('country ', country);
+
+                    article.countries.push(country);
+
+                    return false;
+                }
+            });
+        });
+    }
+
+    function getCities () {
+        // console.log('getCities()');
+        article.analysis.locations.forEach(function (location) {
+
+            article.countries.forEach(function (country) {
+
+                countries[country].forEach(function (city) {
+
+                    // console.log('test country ' + country + ', city ' + city);
+
+                    if (location.toLowerCase() === city.toLowerCase()) {
+
+                        console.log('city ' + city + ', ' + country);
+
+                        article.cities.push(city);
+
+                        return false;
+                    }
+                });
+            });
+
+
+        });
+    }
+
+    article.isConflict = isConflict(article.analysis.classifications);
+
+    getCountries();
+
+    getCities();
+
+    return q();
+
 };
 
 Article.prototype.analyse = analyse;
 
 module.exports = Article;
+
+

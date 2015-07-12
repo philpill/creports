@@ -1,12 +1,9 @@
 var express = require('express'),
     app = express(),
-    q = require('q'),
-    mongojs = require('mongojs');
+    q = require('q');
 
 var controllers = require('./controllers'),
     scrape = require('./scrape');
-
-var day = 86400000;
 
 app.set('views', './views');
 app.set('view engine', 'jade');

@@ -1,7 +1,7 @@
 var request = require('request');
 var $ = cheerio = require('cheerio'); // seems a bit dumb, but required to load xml
 var q = require('q');
-var ARTICLE_SCRAPE_LIMIT = 10;
+var ARTICLE_SCRAPE_LIMIT = 5;
 
 
 var Channel = function (url, articleUrl, isXml) {

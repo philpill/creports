@@ -1,8 +1,17 @@
 var config = require('./config'),
     Channel = require('./models/channel'),
-    Article = require('./models/article');
+    Article = require('./models/article'),
+    mongojs = require('mongojs');
+
+var db = mongojs('creports');
 
 function scrape () {
+
+    // console.log('scrape.scrape()');
+
+    var day = 86400000;
+
+    var articles = db.collection('articles');
 
     var channels = config.channels;
 
@@ -17,12 +26,14 @@ function scrape () {
             article.scrape()
             .then(article.format.bind(article))
             .then(article.analyse.bind(article))
+            .then(article.interpret.bind(article))
             .then(function () {
                 console.log(article.url);
                 console.log(article.data.headline);
-                console.log(article.analysis.classification);
-                console.log('WAR:', article.analysis.isWar);
-                console.log(article.analysis.locations);
+                console.log(article.analysis.classifications);
+                console.log('WAR:', article.isConflict);
+
+                articles.insert(article);
             });
         });
     });
