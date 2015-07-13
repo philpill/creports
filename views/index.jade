@@ -8,4 +8,7 @@ html(lang="en")
     h1!= message
     div#Container
       div#Map
-    script(src='/static/js/grid.js')
+    script.
+        var articles = !{articles};
+        console.log(articles);
+    script(src='/static/js/creports.js')

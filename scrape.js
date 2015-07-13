@@ -21,7 +21,7 @@ function scrape () {
 
         urls.forEach(function (url) {
 
-            var article = new Article(url, channels[0].article.headline, channels[0].article.story);
+            var article = new Article(url, channels[0].article.headline, channels[0].article.story, channel.isConflictNews);
 
             article.scrape()
             .then(article.format.bind(article))
@@ -38,11 +38,7 @@ function scrape () {
         });
     });
 
-    setTimeout(function () {
-
-        scrape();
-
-    }, day);
+    setTimeout(scrape, day);
 }
 
 module.exports = scrape;

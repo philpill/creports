@@ -10,7 +10,7 @@ var gulp = require('gulp'),
 var PATH = {
     input : './src/js/app.js',
     outputPath : './static/js/',
-    outputFile : 'grid.js',
+    outputFile : 'creports.js',
     lib : './bower_components/',
     watchJS : ['src/js/**', 'bower_components/**'],
     watchSCSS : 'src/scss/**',

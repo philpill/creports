@@ -5,12 +5,12 @@ var request = require('request'),
     analyse = require('./analysis.' + config.analyser.api),
     countries = require('../vendor/CountriesToCitiesJSON/countriesToCities');
 
-var Article = function (url, headlineSelector, storySelector) {
+var Article = function (url, headlineSelector, storySelector, isConflict) {
 
     this.url = url;
     this.headlineSelector = headlineSelector;
     this.storySelector = storySelector;
-    this.isConflict = false;
+    this.isConflict = isConflict;
     this.countries = [];
     this.cities = [];
 
@@ -19,6 +19,7 @@ var Article = function (url, headlineSelector, storySelector) {
         classifications : []
     };
     this.data = {};
+    this.inaccuracy = 0.01;
 }
 
 Article.prototype.scrape = function () {
@@ -69,6 +70,9 @@ Article.prototype.interpret = function () {
 
     // http://cv.iptc.org/newscodes/subjectcode/16000000
     function isConflict (classifications) {
+
+        article.inaccuracy += config.analyser.imprecision.classification;
+
         var isConflict = false;
         var regex = /^160[0-9]*/;
         classifications.forEach(function (classification) {
@@ -81,12 +85,17 @@ Article.prototype.interpret = function () {
     }
 
     function getCountries () {
+
         // console.log('getCountries()');
+
+
         article.analysis.locations.forEach(function (location) {
             Object.keys(countries).forEach(function (country) {
                 if (location.toLowerCase() === country.toLowerCase()) {
 
                     console.log('country ', country);
+
+                    article.inaccuracy += config.analyser.imprecision.country;
 
                     article.countries.push(country);
 
@@ -97,7 +106,9 @@ Article.prototype.interpret = function () {
     }
 
     function getCities () {
+
         // console.log('getCities()');
+
         article.analysis.locations.forEach(function (location) {
 
             article.countries.forEach(function (country) {
@@ -110,18 +121,22 @@ Article.prototype.interpret = function () {
 
                         console.log('city ' + city + ', ' + country);
 
+                        article.inaccuracy += config.analyser.imprecision.city;
+
                         article.cities.push(city);
 
                         return false;
                     }
                 });
             });
-
-
         });
     }
 
-    article.isConflict = isConflict(article.analysis.classifications);
+    if (!article.isConflict) {
+
+        article.isConflict = isConflict(article.analysis.classifications);
+    }
+
 
     getCountries();
 

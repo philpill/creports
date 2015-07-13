@@ -13,4 +13,6 @@ app.use(controllers)
 
 app.listen(3000);
 
-scrape();
+// check database
+
+// scrape();
