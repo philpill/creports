@@ -15,4 +15,4 @@ app.listen(3000);
 
 // check database
 
-// scrape();
+scrape();

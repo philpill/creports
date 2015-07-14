@@ -3,7 +3,41 @@ var request = require('request'),
     q = require('q'),
     config = require('../config'),
     analyse = require('./analysis.' + config.analyser.api),
-    countries = require('../vendor/CountriesToCitiesJSON/countriesToCities');
+    countriesToCities = require('../vendor/CountriesToCitiesJSON/countriesToCities'),
+    countryCodes = require('../countries');
+
+
+var cities = loadCities(countriesToCities);
+
+var countries = loadCountries(countriesToCities);
+
+function loadCountries (countriesToCities) {
+
+    console.log('loadCountries()');
+
+    var countries = [];
+
+    countries = countries.concat(Object.keys(countriesToCities));
+
+    console.log(countries.length);
+
+    return countries;
+}
+
+function loadCities (countriesToCities) {
+
+    // console.log('loadCities()');
+
+    var cities = [];
+
+    Object.keys(countriesToCities).forEach(function (country) {
+        if (countriesToCities[country].length) {
+            cities = cities.concat(countriesToCities[country]);
+        }
+    });
+
+    return cities;
+}
 
 var Article = function (url, headlineSelector, storySelector, isConflict) {
 
@@ -25,6 +59,8 @@ var Article = function (url, headlineSelector, storySelector, isConflict) {
 Article.prototype.scrape = function () {
 
     // console.log('scrape()');
+
+    console.log(this.url);
 
     var dfd = q.defer();
 
@@ -84,52 +120,66 @@ Article.prototype.interpret = function () {
         return isConflict;
     }
 
-    function getCountries () {
+    function processLocations () {
 
-        // console.log('getCountries()');
+        console.log('processLocations()');
 
+        var locations = article.analysis.locations || [];
 
-        article.analysis.locations.forEach(function (location) {
-            Object.keys(countries).forEach(function (country) {
-                if (location.toLowerCase() === country.toLowerCase()) {
+        for (var i = 0, j = locations.length; i < j; i++) {
 
-                    console.log('country ', country);
+            console.log(locations[i]);
 
-                    article.inaccuracy += config.analyser.imprecision.country;
+            if (isCountry(locations[i])) {
 
-                    article.countries.push(country);
+                console.log('country ', locations[i]);
 
-                    return false;
-                }
-            });
-        });
+                article.countries.push({
+                    name : locations[i],
+                    code : getCountryCode(locations[i])
+                });
+
+            } else if (isCity(locations[i])) {
+
+                console.log('city ', locations[i]);
+
+                article.cities.push(locations[i]);
+
+            }
+        }
     }
 
-    function getCities () {
+    function isCountry (location) {
 
-        // console.log('getCities()');
+        // console.log('isCountry()');
 
-        article.analysis.locations.forEach(function (location) {
+        article.inaccuracy += config.analyser.imprecision.country;
 
-            article.countries.forEach(function (country) {
+        return (countries.indexOf(location) != -1);
+    }
 
-                countries[country].forEach(function (city) {
+    function getCountryCode (country) {
+        // console.log('getCountryCode() ', country);
+        var code = '';
+        for (var i = 0, j = countryCodes.length; i < j; i++) {
+            if (country.toLowerCase() === countryCodes[i].name.toLowerCase()) {
+                code = countryCodes[i].code;
+                break;
+            }
+        }
+        console.log(code);
+        return code;
+    }
 
-                    // console.log('test country ' + country + ', city ' + city);
+    function isCity (location) {
 
-                    if (location.toLowerCase() === city.toLowerCase()) {
+        // console.log('isCity()');
 
-                        console.log('city ' + city + ', ' + country);
+        // console.log(location);
 
-                        article.inaccuracy += config.analyser.imprecision.city;
+        article.inaccuracy += config.analyser.imprecision.city;
 
-                        article.cities.push(city);
-
-                        return false;
-                    }
-                });
-            });
-        });
+        return (cities.indexOf(location) != -1);
     }
 
     if (!article.isConflict) {
@@ -137,10 +187,7 @@ Article.prototype.interpret = function () {
         article.isConflict = isConflict(article.analysis.classifications);
     }
 
-
-    getCountries();
-
-    getCities();
+    processLocations();
 
     return q();
 
