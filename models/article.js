@@ -54,6 +54,7 @@ var Article = function (url, headlineSelector, storySelector, isConflict) {
     };
     this.data = {};
     this.inaccuracy = 0.01;
+    this.created = Date.now();
 }
 
 Article.prototype.scrape = function () {
