@@ -10,10 +10,6 @@ function scrape () {
 
     // console.log('scrape.scrape()');
 
-
-
-    var day = 86400000;
-
     var articles = db.collection('articles');
 
     var channels = config.channels;
@@ -55,8 +51,6 @@ function scrape () {
 
         });
     });
-
-    setTimeout(scrape, day);
 }
 
 module.exports = scrape;
