@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "aylien_textapi": "*",
-    "browserify": "*",
+    "browserify": "^10.0.0",
     "browserify-shim": "*",
     "bower": "*",
     "cheerio": "*",
