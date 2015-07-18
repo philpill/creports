@@ -59,7 +59,7 @@ var Article = function (url, headlineSelector, storySelector, isConflict) {
 
 Article.prototype.scrape = function () {
 
-    // console.log('scrape()');
+    console.log('scrape()');
 
     console.log(this.url);
 

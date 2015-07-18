@@ -60,7 +60,8 @@ Channel.prototype.getArticleUrls = function(html) {
     var $$ = cheerio.load(html, { xmlMode: this.isXml });
 
     $$('channel > item > link').each(function (index, el) {
-        if (urls.length < ARTICLE_SCRAPE_LIMIT) {
+
+        if (index < ARTICLE_SCRAPE_LIMIT) {
             urls.push($(el).text());
         } else {
             return false;

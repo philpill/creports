@@ -26,7 +26,11 @@ function scrape () {
 
             articles.findOne({ url : url }, function(err, article) {
 
-                if (err || !article) {
+                if (err) {
+
+                    console.log(err);
+
+                } else if (!article) {
 
                     var article = new Article(url, channels[0].article.headline, channels[0].article.story, channel.isConflictNews);
 
@@ -42,6 +46,10 @@ function scrape () {
 
                         articles.insert(article);
                     });
+                } else {
+
+                    console.log(url);
+                    console.log('url already scraped');
                 }
             });
 
