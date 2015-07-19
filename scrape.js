@@ -14,43 +14,49 @@ function scrape () {
 
     var channels = config.channels;
 
-    var channel = new Channel(channels[0].url, channels[0].articleUrl, channels[0].isXml);
+    var channel;
 
-    channel.scrape().then(function (urls) {
+    channels.forEach(function (data) {
 
-        urls.forEach(function (url) {
+        channel = new Channel(data.url, data.articleUrl, data.isXml);
 
-            articles.findOne({ url : url }, function(err, article) {
+        channel.scrape().then(function processScrape (urls) {
 
-                if (err) {
+            urls.forEach(function (url) {
 
-                    console.log(err);
+                articles.findOne({ url : url }, function(err, article) {
 
-                } else if (!article) {
+                    if (err) {
 
-                    var article = new Article(url, channels[0].article.headline, channels[0].article.story, channel.isConflictNews);
+                        console.log(err);
 
-                    article.scrape()
-                    .then(article.format.bind(article))
-                    .then(article.analyse.bind(article))
-                    .then(article.interpret.bind(article))
-                    .then(function () {
-                        console.log(article.url);
-                        console.log(article.data.headline);
-                        console.log(article.analysis.classifications);
-                        console.log('WAR:', article.isConflict);
+                    } else if (!article) {
 
-                        articles.insert(article);
-                    });
-                } else {
+                        var article = new Article(url, data.article.headline, data.article.story, data.isConflictNews);
 
-                    console.log(url);
-                    console.log('url already scraped');
-                }
+                        article.scrape()
+                        .then(article.format.bind(article))
+                        .then(article.analyse.bind(article))
+                        .then(article.interpret.bind(article))
+                        .then(function () {
+                            console.log(article.url);
+                            console.log(article.data.headline);
+                            console.log(article.analysis.classifications);
+                            console.log('WAR:', article.isConflict);
+
+                            articles.insert(article);
+                        });
+                    } else {
+
+                        console.log(url);
+                        console.log('url already scraped');
+                    }
+                });
+
             });
-
         });
     });
+
 }
 
 module.exports = scrape;
