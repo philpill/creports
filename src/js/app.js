@@ -27,6 +27,11 @@
             },
             fills : {
                 defaultFill : 'gray'
+            },
+            done: function(datamap) {
+                datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+                    console.log(geography.id);
+                });
             }
         });
 
@@ -45,14 +50,11 @@
 
         articles.forEach(function (article) {
 
-            if (article.isConflict) {
-
-                article.countries.forEach(function (country) {
-                    if (country.code) {
-                        countries[country.code] = 'red';
-                    }
-                });
-            }
+            article.countries.forEach(function (country) {
+                if (country.code) {
+                    countries[country.code] = 'red';
+                }
+            });
         });
 
         console.log(countries);
