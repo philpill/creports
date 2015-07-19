@@ -1,14 +1,15 @@
 doctype html
 html(lang="en")
-  head
-    meta(charset="utf-8")
-    title Conflicting Reports
-    link(href='/static/css/main.css',rel='stylesheet')
-  body
-    h1
-      a(href="http://conflictingreports.co.uk") Conflicting Reports
+    head
+        meta(charset="utf-8")
+        title Conflicting Reports
+        link(href='/static/css/main.css',rel='stylesheet')
+    body
+        h1
+            a(href="http://conflictingreports.co.uk") Conflicting Reports
     div#Container
-      div#Map
+        div#Map
+        ul#Articles
     script.
         var articles = !{articles};
     script(src='/static/js/creports.js')

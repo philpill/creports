@@ -22,6 +22,7 @@ var libs = [
     PATH.lib + 'topojson',
     PATH.lib + 'datamaps/dist',
     PATH.lib + 'jquery/dist/',
+    PATH.lib + 'lodash',
     PATH.lib + 'normalize.css'
 ];
 

@@ -25,13 +25,22 @@ router.get('/', function(req, res) {
     var projection = {
         cities : 1,
         countries : 1,
-        created : 1,
         data : 1,
         url : 1,
         _id :0
     };
 
     articles.find(criteria, projection, function(err, docs) {
+
+        docs.forEach(function (doc) {
+
+            doc.headline = doc.data.headline;
+            doc.story = doc.data.story;
+
+            delete doc.data;
+
+            return doc;
+        });
 
         res.render('index', { articles : JSON.stringify(docs) });
     });
