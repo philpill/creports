@@ -21,6 +21,7 @@
     "jquery": null,
     "d3": null,
     "topojson": null,
-    "datamaps": null
+    "datamaps": null,
+    "normalize.css" : null
   }
 }

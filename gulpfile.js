@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    concat = require('gulp-concat'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
@@ -12,15 +13,16 @@ var PATH = {
     outputPath : './static/js/',
     outputFile : 'creports.js',
     lib : './bower_components/',
-    watchJS : ['src/js/**', 'bower_components/**'],
-    watchSCSS : 'src/scss/**',
+    watchJS : ['src/js/**', 'bower_components/**/*.js'],
+    watchSCSS : ['bower_components/**/*.{sass,css}', 'src/scss/**'],
 }
 
 var libs = [
     PATH.lib + 'd3',
     PATH.lib + 'topojson',
     PATH.lib + 'datamaps/dist',
-    PATH.lib + 'jquery/dist/'
+    PATH.lib + 'jquery/dist/',
+    PATH.lib + 'normalize.css'
 ];
 
 gulp.task('watch', function () {
@@ -35,6 +37,7 @@ gulp.task('watch', function () {
 gulp.task('sass', function () {
     gulp.src(PATH.watchSCSS)
         .pipe(sass())
+        .pipe(concat('main.css'))
         .pipe(gulp.dest('./static/css'));
 });
 

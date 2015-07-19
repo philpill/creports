@@ -10,7 +10,7 @@ router.get('/', function(req, res) {
 
     articles.find(function(err, docs) {
 
-        res.render('index', { title: 'Conflicting Reports', articles : JSON.stringify(docs) });
+        res.render('index', { articles : JSON.stringify(docs) });
     });
 
 });

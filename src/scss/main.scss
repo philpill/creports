@@ -1,9 +1,26 @@
+
+h1 {
+    margin: 20px;
+    a {
+        text-decoration: none;
+        color: gray;
+        &:visited {
+            color: gray;
+        }
+        &:hover {
+            color: red;
+        }
+    }
+}
+
 #Container {
-  margin: 20px;
-  padding: 20px;
-  border: solid 1px silver;
+    margin: 20px;
+    padding: 20px;
+    border: solid 1px silver;
+    max-width: 800px;
+    max-height: 600px;
 }
 
 #Map {
-  width: 100%;
+    width: 100%;
 }
