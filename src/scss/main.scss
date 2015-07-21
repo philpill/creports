@@ -1,24 +1,33 @@
+$dark-green: #008000; // Green
+$green: #32CD32; // LimeGreen
+$light-green: #00FF7F; // SpringGreen
+$black: #000000; // Black
+
+html {
+    background: $black;
+    font-family: "Courier New", Courier, monospace;
+}
 
 h1 {
     margin: 20px;
-    a {
-        text-decoration: none;
-        color: gray;
-        &:visited {
-            color: gray;
-        }
-        &:hover {
-            color: red;
-        }
+    font-weight: normal;
+}
+
+a {
+    border-bottom: solid 1px $black;
+    transition: border-bottom 600ms;
+    color: $light-green;
+    text-decoration: none;
+    &:visited {
+        color: $light-green;
+    }
+    &:hover {
+        border-bottom: solid 1px $light-green;
     }
 }
 
 #Container {
     margin: 20px;
-    padding: 20px;
-    border: solid 1px silver;
-    max-width: 800px;
-    max-height: 600px;
 }
 
 #Map {

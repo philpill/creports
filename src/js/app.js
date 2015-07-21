@@ -24,13 +24,13 @@
             responsive : true,
             projection: 'mercator',
             geographyConfig : {
-                highlightOnHover : true,
-                highlightFillColor : 'skyblue',
-                highlightBorderColor : 'white',
+                borderColor: 'LimeGreen',
+                highlightFillColor : 'Green',
+                highlightBorderColor : 'black',
                 highlightBorderWidth : 1
             },
             fills : {
-                defaultFill : 'gray'
+                defaultFill : 'black'
             },
             done: function(datamap) {
                 datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {

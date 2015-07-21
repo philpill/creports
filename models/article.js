@@ -87,8 +87,6 @@ Article.prototype.format = function (body) {
 
     var $story = $(this.storySelector);
 
-    // console.log($headline.text());
-
     if ($headline.length > 0 && $story.length > 0) {
 
         this.data.headline = $headline.text().trim();

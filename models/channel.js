@@ -4,10 +4,11 @@ var q = require('q');
 var ARTICLE_SCRAPE_LIMIT = 50;
 
 
-var Channel = function (url, articleUrl, isXml) {
+var Channel = function (url, articleUrl, isXml, isUrlAttribute) {
     this.url = url;
     this.articleUrl = articleUrl;
     this.isXml = isXml;
+    this.isUrlAttribute = isUrlAttribute;
 }
 
 Channel.prototype.scrape = function () {
@@ -59,10 +60,12 @@ Channel.prototype.getArticleUrls = function(html) {
     var urls = [];
     var $$ = cheerio.load(html, { xmlMode: this.isXml });
 
-    $$('channel > item > link').each(function (index, el) {
+    $$(this.articleUrl).each(function (index, el) {
+
+        var url = this.isUrlAttribute ? $(el).attr('href') : $(el).text();
 
         if (index < ARTICLE_SCRAPE_LIMIT) {
-            urls.push($(el).text());
+            urls.push(url);
         } else {
             return false;
         }

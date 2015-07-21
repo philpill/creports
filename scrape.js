@@ -18,7 +18,12 @@ function scrape () {
 
     channels.forEach(function (data) {
 
-        channel = new Channel(data.url, data.articleUrl, data.isXml);
+        if (!data.enabled) {
+
+            return;
+        }
+
+        channel = new Channel(data.url, data.articleUrl, data.isXml, data.isUrlAttribute);
 
         channel.scrape().then(function processScrape (urls) {
 
@@ -48,12 +53,16 @@ function scrape () {
                         });
                     } else {
 
-                        console.log(url);
-                        console.log('url already scraped');
+                        console.log('scraped: ', url);
                     }
                 });
 
             });
+
+        }).done(function () {
+
+            console.log('scrape complete: ', data.url);
+
         });
     });
 
