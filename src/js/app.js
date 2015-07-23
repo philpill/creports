@@ -24,29 +24,38 @@
             responsive : true,
             projection: 'mercator',
             geographyConfig : {
-                borderColor: 'LimeGreen',
-                highlightFillColor : 'Green',
-                highlightBorderColor : 'black',
-                highlightBorderWidth : 1
+                borderColor: 'SpringGreen',
+                highlightFillColor : 'LimeGreen',
+                highlightBorderWidth : 1,
+                popupOnHover: false
             },
             fills : {
                 defaultFill : 'black'
             },
             done: function(datamap) {
+
                 datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-                    // console.log(geography.id);
 
-                    var articles = articlesByCountry[geography.id];
+                    $('#Articles').removeClass('active');
 
-                    if (articles && articles.length > 0) {
+                    setTimeout(function () {
 
-                        document.getElementById('Articles').innerHTML = '';
+                        var articles = articlesByCountry[geography.id];
 
-                        articles.forEach(function (article) {
+                        if (articles && articles.length > 0) {
 
-                            document.getElementById('Articles').innerHTML += '<li><a href="' + article.url + '">' + article.headline + '</a></li>';
-                        });
-                    }
+                            $('#Articles').addClass('active');
+
+                            document.getElementById('Articles').innerHTML = '';
+
+                            articles.forEach(function (article) {
+
+                                document.getElementById('Articles').innerHTML += '<li><a href="' + article.url + '">' + article.headline + '</a></li>';
+                            });
+                        }
+
+                    }, 600);
+
                 });
             }
         });
