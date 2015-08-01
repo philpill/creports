@@ -1,6 +1,6 @@
-$dark-green: #008000; // Green
-$green: #32CD32; // LimeGreen
-$light-green: #00FF7F; // SpringGreen
+$green: #008000; // Green
+// $green: #32CD32; // LimeGreen
+// $green: #00FF7F; // SpringGreen
 $black: #000000; // Black
 $delay: 400ms;
 
@@ -21,24 +21,36 @@ h1 {
     z-index: 1;
     background: $black;
     a {
-        color: $light-green;
+        color: $green;
     }
 }
 
 a {
-    border-bottom: solid 1px $black;
-    transition: border-color $delay, color $delay;
+    transition: background $delay, color $delay;
     color: $green;
     text-decoration: none;
     &:visited {
         color: $green;
     }
     &:hover {
-        border-bottom: solid 1px $green;
+        background: $green;
+        color: $black;
     }
 }
 
+#Overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+
 #Articles {
+    position: absolute;
+    top: 100%;
+    left: 0;
     margin: 0;
     z-index: 1;
     padding: 20px;
@@ -54,13 +66,27 @@ a {
         border: solid 1px $green;
         a {
             color: $green;
+            &:hover {
+                color: $black;
+            }
         }
     }
+}
+
+#Sources {
+    pointer-events: auto;
+    position: absolute;
+    top: 70%;
+    left: 0;
+    border: solid 1px $green;
+    padding: 20px;
+    background: $black;
 }
 
 #Container {
     max-width: 800px;
     margin: 20px;
+    position: relative;
 }
 
 #Map {

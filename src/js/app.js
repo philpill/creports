@@ -24,8 +24,8 @@
             responsive : true,
             projection: 'mercator',
             geographyConfig : {
-                borderColor: 'SpringGreen',
-                highlightFillColor : 'LimeGreen',
+                borderColor: 'Green',
+                highlightFillColor : 'Green',
                 highlightBorderWidth : 1,
                 popupOnHover: false
             },
@@ -83,7 +83,7 @@
                         headline : article.headline,
                         story : article.story
                     });
-                    countries[country.code] = countries[country.code] ? countries[country.code] + 0.2 : 0.2;
+                    countries[country.code] = countries[country.code] ? countries[country.code] + 0.15 : 0.15;
                 }
             });
         });

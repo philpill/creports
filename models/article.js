@@ -39,12 +39,12 @@ function loadCities (countriesToCities) {
     return cities;
 }
 
-var Article = function (url, headlineSelector, storySelector, isConflict) {
+var Article = function (url, data) {
 
     this.url = url;
-    this.headlineSelector = headlineSelector;
-    this.storySelector = storySelector;
-    this.isConflict = isConflict;
+    this.headlineSelector = data.article.headline;
+    this.storySelector = data.article.story;
+    this.isConflict = data.isConflictNews;
     this.countries = [];
     this.cities = [];
 
@@ -55,6 +55,11 @@ var Article = function (url, headlineSelector, storySelector, isConflict) {
     this.data = {};
     this.inaccuracy = 0.01;
     this.created = Date.now();
+
+    this.source = {
+        domain : data.domain,
+        name : data.name
+    };
 }
 
 Article.prototype.scrape = function () {

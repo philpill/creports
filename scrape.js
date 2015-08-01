@@ -37,7 +37,7 @@ function scrape () {
 
                     } else if (!article) {
 
-                        var article = new Article(url, data.article.headline, data.article.story, data.isConflictNews);
+                        var article = new Article(url, data);
 
                         article.scrape()
                         .then(article.format.bind(article))

@@ -1,6 +1,7 @@
 var express = require('express'),
     router = express.Router(),
-    mongojs = require('mongojs');
+    mongojs = require('mongojs'),
+    _ = require('lodash');
 
 var db = mongojs('creports');
 
@@ -27,22 +28,34 @@ router.get('/', function(req, res) {
         countries : 1,
         data : 1,
         url : 1,
+        source : 1,
         _id :0
     };
 
-    articles.find(criteria, projection, function(err, docs) {
+
+    articles.find(criteria, projection, function (err, docs) {
+
+        var sources = [];
 
         docs.forEach(function (doc) {
 
             doc.headline = doc.data.headline;
             doc.story = doc.data.story;
 
+            sources.push(doc.source);
+
             delete doc.data;
 
             return doc;
         });
 
-        res.render('index', { articles : JSON.stringify(docs) });
+        sources = _.uniq(sources, function(source, key, a) {
+
+            return source.name;
+        });
+
+        res.render('index', { articles : JSON.stringify(docs), sources : sources });
+
     });
 
 });

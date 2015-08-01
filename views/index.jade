@@ -9,7 +9,13 @@ html(lang="en")
             a(href="http://conflictingreports.co.uk") Conflicting Reports
     div#Container
         div#Map
-        ul#Articles
+        div#Overlay
+            ul#Articles
+            ul#Sources
+                - for (var i = 0; i < sources.length; i++)
+                    li
+                        a(href="#{ sources[i].domain }") !{ sources[i].name }
+
     script.
         var articles = !{articles};
     script(src='/static/js/creports.js')
