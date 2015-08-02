@@ -141,7 +141,7 @@ Article.prototype.interpret = function () {
         // http://misc.flogisoft.com/bash/tip_colors_and_formatting#foreground_text
         console.log('CONFLICT RATING: \033[31m', conflictRating, '\033[0m');
 
-        article.isConflict = conflictRating > 0.7;
+        article.isConflict = conflictRating > config.conflictThreshold;
     }
 
     return q();
