@@ -2,7 +2,7 @@ var request = require('request'),
     $ = cheerio = require('cheerio'),
     q = require('q'),
     config = require('../config'),
-    analyse = require('./analysis.' + config.analyser.api),
+    analysis = require('./analysis'),
     countriesToCities = require('../vendor/CountriesToCitiesJSON/countriesToCities'),
     countryCodes = require('../countries');
 
@@ -104,100 +104,29 @@ Article.prototype.format = function (body) {
 
 Article.prototype.interpret = function () {
 
-    // console.log('interpret()');
+    console.log('interpret()');
 
     var article = this;
 
-    // http://cv.iptc.org/newscodes/subjectcode/16000000
-    function isConflict (classifications) {
-
-        article.inaccuracy += config.analyser.imprecision.classification;
-
-        var isConflict = false;
-        var regex = /^160[0-9]*/;
-        classifications.forEach(function (classification) {
-            if (regex.test(classification.code)) {
-                isConflict = true;
-                return false;
-            }
-        });
-        return isConflict;
-    }
-
-    function processLocations () {
-
-        console.log('processLocations()');
-
-        var locations = article.analysis.locations || [];
-
-        for (var i = 0, j = locations.length; i < j; i++) {
-
-            console.log(locations[i]);
-
-            if (isCountry(locations[i])) {
-
-                console.log('country ', locations[i]);
-
-                article.countries.push({
-                    name : locations[i],
-                    code : getCountryCode(locations[i])
-                });
-
-            } else if (isCity(locations[i])) {
-
-                console.log('city ', locations[i]);
-
-                article.cities.push(locations[i]);
-
-            }
-        }
-    }
-
-    function isCountry (location) {
-
-        // console.log('isCountry()');
-
-        article.inaccuracy += config.analyser.imprecision.country;
-
-        return (countries.indexOf(location) != -1);
-    }
-
-    function getCountryCode (country) {
-        // console.log('getCountryCode() ', country);
-        var code = '';
-        for (var i = 0, j = countryCodes.length; i < j; i++) {
-            if (country.toLowerCase() === countryCodes[i].name.toLowerCase()) {
-                code = countryCodes[i].code;
-                break;
-            }
-        }
-        console.log(code);
-        return code;
-    }
-
-    function isCity (location) {
-
-        // console.log('isCity()');
-
-        // console.log(location);
-
-        article.inaccuracy += config.analyser.imprecision.city;
-
-        return (cities.indexOf(location) != -1);
-    }
+    article.countries = article.getCountries();
 
     if (!article.isConflict) {
 
-        article.isConflict = isConflict(article.analysis.classifications);
-    }
+        var conflictRating = article.getConflictRating();
 
-    processLocations();
+        // http://misc.flogisoft.com/bash/tip_colors_and_formatting#foreground_text
+        console.log('CONFLICT RATING: \033[31m', conflictRating, '\033[0m');
+
+        article.isConflict = conflictRating > 0.7;
+    }
 
     return q();
 
 };
 
-Article.prototype.analyse = analyse;
+Article.prototype.getConflictRating = analysis.getConflictRating;
+
+Article.prototype.getCountries = analysis.getCountries;
 
 module.exports = Article;
 

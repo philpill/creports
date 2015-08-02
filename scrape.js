@@ -41,13 +41,12 @@ function scrape () {
 
                         article.scrape()
                         .then(article.format.bind(article))
-                        .then(article.analyse.bind(article))
+                        //.then(article.analyse.bind(article))
                         .then(article.interpret.bind(article))
                         .then(function () {
                             console.log(article.url);
                             console.log(article.data.headline);
-                            console.log(article.analysis.classifications);
-                            console.log('WAR:', article.isConflict);
+                            console.log('WAR:', article.isConflict ? '\033[31mtrue\033[0m' : 'false');
 
                             articles.insert(article);
                         });
