@@ -41,7 +41,6 @@ function scrape () {
 
                         article.scrape()
                         .then(article.format.bind(article))
-                        //.then(article.analyse.bind(article))
                         .then(article.interpret.bind(article))
                         .then(function () {
                             console.log(article.url);
@@ -51,20 +50,12 @@ function scrape () {
                             articles.insert(article);
                         });
                     } else {
-
                         console.log('scraped: ', url);
                     }
                 });
-
             });
-
-        }).done(function () {
-
-            console.log('scrape complete: ', data.url);
-
         });
     });
-
 }
 
 module.exports = scrape;
