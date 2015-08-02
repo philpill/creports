@@ -3,70 +3,7 @@ var request = require('request'),
     q = require('q'),
     _ = require('lodash'),
     config = require('../config'),
-    countriesToCities = require('../vendor/CountriesToCitiesJSON/countriesToCities'),
-    countryCodes = require('../countries');
-
-
-var cities = loadCities(countriesToCities);
-
-var countries = loadCountries(countriesToCities);
-
-function loadCountries (countriesToCities) {
-
-    console.log('loadCountries()');
-
-    var countries = [];
-
-    countries = countries.concat(Object.keys(countriesToCities));
-
-    // console.log(countries.length);
-
-    return countries;
-}
-
-function loadCities (countriesToCities) {
-
-    // console.log('loadCities()');
-
-    var cities = [];
-
-    Object.keys(countriesToCities).forEach(function (country) {
-        if (countriesToCities[country].length) {
-            cities = cities.concat(countriesToCities[country]);
-        }
-    });
-
-    return cities;
-}
-
-var keywords = _.map(config.keywords, function (keyword) {
-
-    // console.log(keyword);
-
-    return keyword.term;
-});
-
-var keywordsRating = [];
-
-_.each(config.keywords, function (keyword) {
-
-    keywordsRating[keyword.term] = keyword.relevance
-});
-
-var countryNames = _.flatten(_.map(config.countries, function (country) {
-
-    return country.names;
-}));
-
-var countriesByName = [];
-
-_.each(config.countries, function (country) {
-
-    _.each(country.names, function (name) {
-
-        countriesByName[name] = country.code;
-    });
-});
+    data = require('../data');
 
 var Article = function (url, data) {
 
@@ -128,7 +65,7 @@ Article.prototype.format = function (body) {
 
 Article.prototype.interpret = function () {
 
-    console.log('interpret()');
+    // console.log('interpret()');
 
     var article = this;
 
@@ -157,15 +94,15 @@ Article.prototype.getCountries = function () {
 
     var story = article.data.story;
 
+    var countryNames = data.countriesData.countryNames;
+
     for (var i = 0, j = countryNames.length; i < j; i++) {
 
         if (new RegExp('\\b' + countryNames[i] + '\\b', 'g').test(story)) {
 
             var country = countryNames[i];
 
-            var code = countriesByName[country];
-
-            // console.log('CODE: ', code);
+            var code = data.countriesData.countriesByName[country];
 
             countries.push({
                 name : country,
@@ -185,21 +122,17 @@ Article.prototype.getConflictRating = function () {
 
     var article = this;
 
-    var story = article.data.story;
-
     var lineBreaks = /\r?\n|\r/g;
 
     var punctuation = /[\.,-\/#!$%\^&\*;:{}=\-_`~()?'"]/g;
 
-    story = story.replace(punctuation, ' ');
+    var story = article.data.story.replace(punctuation, ' ').replace(lineBreaks, ' ');
 
-    story = story.replace(lineBreaks, ' ');
-
-    // console.log(story);
+    var storyLength = story.split(' ').length;
 
     var points = 0;
 
-    var keyword;
+    var keywordTerm;
 
     var matches;
 
@@ -207,35 +140,26 @@ Article.prototype.getConflictRating = function () {
 
     var occurances = 0;
 
-    for (var i = 0, j = keywords.length; i < j; i++) {
+    for (var i = 0, j = config.keywords.length; i < j; i++) {
 
-        keyword = keywords[i];
+        keywordTerm = config.keywords[i].term;
 
-        rating = keywordsRating[keyword];
+        rating = data.keywordsData.ratings[keywordTerm];
 
-        matches = story.match(new RegExp('\\b' + keyword + '\\b', 'gi')) || [];
+        matches = story.match(new RegExp('\\b' + keywordTerm + '\\b', 'gi')) || [];
 
         // limit repetitions
-        occurances = matches.length > 5 ? 5 : matches.length;
-
-        // console.log('keywordsRating[keyword] ', keyword);
+        occurances = Math.min(matches.length, config.conflictKeywordRepetitionThreshold);
 
         if (occurances) {
-            console.log(keyword);
+
+            console.log(keywordTerm);
         }
-
-        // console.log('story.match(new RegExp(keyword, gi)).length', matches.length);
-
 
         points += (rating * occurances);
     }
 
-    // console.log('POINTS ', points);
-    // console.log('KEYWORDS', keywords.length);
-
-    // console.log(points && keywords.length ? points/keywords.length : 0);
-
-    return points && keywords.length ? points/keywords.length : 0;
+    return points && storyLength && storyLength > 100 ? points/story.split(' ').length : 0;
 }
 
 module.exports = Article;
