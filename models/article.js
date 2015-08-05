@@ -12,7 +12,6 @@ var Article = function (url, data) {
     this.storySelector = data.article.story;
     this.isConflict = data.isConflictNews;
     this.countries = [];
-    this.cities = [];
 
     this.data = {};
     this.created = Date.now();
@@ -111,7 +110,7 @@ Article.prototype.getCountries = function () {
         }
     }
 
-    console.log(countries);
+    // console.log(countries);
 
     return countries;
 }
@@ -153,7 +152,7 @@ Article.prototype.getConflictRating = function () {
 
         if (occurances) {
 
-            console.log(keywordTerm);
+            // console.log(keywordTerm);
         }
 
         points += (rating * occurances);
