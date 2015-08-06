@@ -139,9 +139,11 @@ Article.prototype.getConflictRating = function () {
 
     var occurances = 0;
 
-    for (var i = 0, j = config.keywords.length; i < j; i++) {
+    var configKeywords = config.keywords || [];
 
-        keywordTerm = config.keywords[i].term;
+    for (var i = 0, j = configKeywords.length; i < j; i++) {
+
+        keywordTerm = configKeywords[i].term;
 
         rating = data.keywordsData.ratings[keywordTerm];
 
