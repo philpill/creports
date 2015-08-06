@@ -1,3 +1,7 @@
 language: node_js
 node_js:
   - "0.12"
+install: npm install
+before_script:
+  - ./node_modules/bower/bin/bower install
+  - ./node_modules/gulp/bin/gulp.js browserify sass
