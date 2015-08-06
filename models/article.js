@@ -139,6 +139,10 @@ Article.prototype.getConflictRating = function () {
 
     var occurances = 0;
 
+    console.log(config);
+
+    console.log(config.keywords);
+
     var configKeywords = config.keywords || [];
 
     for (var i = 0, j = configKeywords.length; i < j; i++) {
