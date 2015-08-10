@@ -9,17 +9,22 @@ html {
     font-family: "Courier New", Courier, monospace;
 }
 
-h1 {
-    padding: 20px;
+h1, h2 {
+    padding: 0;
     margin: 0;
     font-weight: normal;
+    font-size: 1em;
+    background: $black;
+    color: $green;
+}
+
+h1 {
+    padding: 20px;
     position: absolute;
     top: 10px;
     left: 10px;
     border: solid 1px $green;
-    font-size: 1em;
     z-index: 1;
-    background: $black;
     a {
         color: $green;
     }
@@ -47,7 +52,7 @@ a {
     pointer-events: none;
 }
 
-#Articles {
+#Stories {
     position: absolute;
     top: 100%;
     left: 0;
@@ -57,13 +62,17 @@ a {
     transition: border-color $delay;
     border: solid 1px $black;
     pointer-events: none;
-    a {
+    h2, a {
+        transition: color $delay;
         color: $black;
     }
     &.active {
         pointer-events: auto;
         background: $black;
         border: solid 1px $green;
+        h2 {
+            color: $green;
+        }
         a {
             color: $green;
             &:hover {
@@ -71,6 +80,16 @@ a {
             }
         }
     }
+}
+
+#Country {
+
+
+}
+
+#Articles {
+    margin: 0;
+    padding: 0;
 }
 
 #Sources {

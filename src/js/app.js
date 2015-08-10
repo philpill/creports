@@ -36,7 +36,9 @@
 
                 datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
 
-                    $('#Articles').removeClass('active');
+                    console.log(geography);
+
+                    $('#Stories').removeClass('active');
 
                     setTimeout(function () {
 
@@ -44,11 +46,13 @@
 
                         if (articles && articles.length > 0) {
 
-                            $('#Articles').addClass('active');
+                            $('#Stories').addClass('active');
 
                             document.getElementById('Articles').innerHTML = '';
 
                             articles.forEach(function (article) {
+
+                                document.getElementById('Country').innerHTML = geography.properties.name;
 
                                 document.getElementById('Articles').innerHTML += '<li><a href="' + article.url + '">' + article.headline + '</a></li>';
                             });

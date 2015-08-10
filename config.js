@@ -349,7 +349,7 @@ config.channels = [{
     enabled : true,
     domain : 'http://www.independent.co.uk/',
     url : 'http://rss.feedsportal.com/c/266/f/3503/index.rss',
-    articleUrl : 'channel > item > link',
+    articleUrl : 'channel > item > guid',
     isUrlAttribute : false,
     isXml : true,
     isConflict : false,
