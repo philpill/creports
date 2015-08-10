@@ -1,7 +1,8 @@
 var express = require('express'),
     router = express.Router(),
     mongojs = require('mongojs'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    config = require('../config');
 
 var db = mongojs('creports');
 
@@ -32,10 +33,11 @@ router.get('/', function(req, res) {
         _id :0
     };
 
-
     articles.find(criteria, projection, function (err, docs) {
 
         var sources = [];
+
+        var configChannels = [];
 
         docs.forEach(function (doc) {
 
@@ -49,15 +51,23 @@ router.get('/', function(req, res) {
             return doc;
         });
 
-        sources = _.uniq(sources, function(source, key, a) {
+        sources = _.uniq(sources);
 
-            return source.name;
+        _.each(sources, function (source) {
+
+            var configChannel = _.find(config.channels, function(channel) { return channel.name === source });
+
+            if (configChannel) {
+                configChannels.push({
+                    name : configChannel.name,
+                    domain : configChannel.domain,
+                    id : configChannel.id
+                });
+            };
         });
 
-        res.render('index', { articles : JSON.stringify(docs), sources : sources });
-
+        res.render('index', { articles : JSON.stringify(docs), sources : configChannels });
     });
-
 });
 
 module.exports = router;

@@ -285,7 +285,9 @@ config.keywords = [
     { relevance : 8, term : 'missile' },
     { relevance : 8, term : 'missiles' },
     { relevance : 9, term : 'militia' },
-    { relevance : 4, term : 'fighters' }
+    { relevance : 4, term : 'fighters' },
+    { relevance : 3, term : 'hostage' },
+    { relevance : 3, term : 'hostages' }
 ];
 
 config.conflictThreshold =  0.05;
@@ -294,6 +296,7 @@ config.conflictKeywordRepetitionThreshold =  3;
 
 config.channels = [{
     name : 'BBC',
+    id : 'SourceBbc',
     enabled : true,
     domain : 'http://www.bbc.co.uk/',
     url : 'http://feeds.bbci.co.uk/news/world/rss.xml',
@@ -307,6 +310,7 @@ config.channels = [{
     }
 }, {
     name : 'Al Jazeera',
+    id : 'SourceAlJazeera',
     enabled : true,
     domain : 'http://www.aljazeera.com/',
     url : 'http://www.aljazeera.com/xml/rss/all.xml',
@@ -320,6 +324,7 @@ config.channels = [{
     }
 }, {
     name : 'Reuters',
+    id : 'SourceReuters',
     enabled : true,
     domain : 'http://uk.reuters.com/',
     url : 'http://mf.feeds.reuters.com/reuters/UKWorldNews',
@@ -333,6 +338,7 @@ config.channels = [{
     }
 }, {
     name : 'Wikinews',
+    id : 'SourceWikinews',
     enabled : true,
     domain : 'https://en.wikinews.org/',
     url : 'https://en.wikinews.org/w/index.php?title=Special:NewsFeed&feed=atom&categories=Published%7CPolitics_and_conflicts&notcategories=No%20publish%7Cdisputed&namespace=0&count=15&ordermethod=categoryadd&stablepages=only',
@@ -346,6 +352,7 @@ config.channels = [{
     }
 }, {
     name : 'Independant',
+    id : 'SourceIndependant',
     enabled : true,
     domain : 'http://www.independent.co.uk/',
     url : 'http://rss.feedsportal.com/c/266/f/3503/index.rss',

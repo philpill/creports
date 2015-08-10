@@ -16,10 +16,7 @@ var Article = function (url, data) {
     this.data = {};
     this.created = Date.now();
 
-    this.source = {
-        domain : data.domain,
-        name : data.name
-    };
+    this.source = data.name;
 }
 
 Article.prototype.scrape = function () {

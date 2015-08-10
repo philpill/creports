@@ -66,14 +66,44 @@
 
         updateMap(articles);
 
+        bindEvents();
+    }
+
+    function bindEvents () {
+
         $(window).on('resize', function () {
             map.resize();
+        });
+
+        $('.source-check').on('change', function () {
+
+            var filteredArticles = [];
+
+            var sources = $('.source-check:checked');
+
+            _.each(articles, function (article) {
+
+                _.each(sources, function (source) {
+
+                    if (source.value === article.source) {
+
+                        filteredArticles.push(article);
+                    }
+
+                });
+            });
+
+            updateMap(filteredArticles);
         });
     }
 
     function updateMap (articles) {
 
-        // console.log('updateMap()');
+        console.log('updateMap()');
+
+        console.log(map);
+
+        console.log(articles.length);
 
         var countries = {};
 
