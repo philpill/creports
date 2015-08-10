@@ -93,17 +93,34 @@
                 });
             });
 
+            resetMap();
             updateMap(filteredArticles);
         });
+    }
+
+    function resetMap () {
+
+        var countries = {};
+
+        articlesByCountry = {};
+
+        articles.forEach(function (article) {
+
+            article.countries.forEach(function (country) {
+
+                if (country.code) {
+
+                    countries[country.code] = 0;
+                }
+            });
+        });
+
+        map.updateChoropleth(countries);
     }
 
     function updateMap (articles) {
 
         console.log('updateMap()');
-
-        console.log(map);
-
-        console.log(articles.length);
 
         var countries = {};
 
