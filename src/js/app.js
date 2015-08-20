@@ -11,6 +11,21 @@
 
     var articlesByCountry = {};
 
+    var countries = {};
+
+    var countryCodes = _.filter(_.map(Datamap.prototype.worldTopo.objects.world.geometries, function (geometry) {
+        // console.log(geometry);
+        return geometry.id;
+    }), function (id) {
+        return id.match(/^[A-Z][A-Z][A-Z]$/);
+    });
+
+    _.each(countryCodes, function (code) {
+        countries[code] = 0;
+    });
+
+    console.log(countries);
+
     function init () {
 
         console.log('conflicting reports');
@@ -100,20 +115,12 @@
 
     function resetMap () {
 
-        var countries = {};
+        _.each(countryCodes, function (code) {
+
+            countries[code] = 0;
+        });
 
         articlesByCountry = {};
-
-        articles.forEach(function (article) {
-
-            article.countries.forEach(function (country) {
-
-                if (country.code) {
-
-                    countries[country.code] = 0;
-                }
-            });
-        });
 
         map.updateChoropleth(countries);
     }
@@ -121,8 +128,6 @@
     function updateMap (articles) {
 
         console.log('updateMap()');
-
-        var countries = {};
 
         articles.forEach(function (article) {
 
