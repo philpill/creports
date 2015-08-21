@@ -3,7 +3,6 @@
 #conflictingreports
 
 APP_PATH="/var/www/creports/"
-LOCAL_PATH="./"
 
 function init {
     clear
@@ -14,6 +13,12 @@ function init {
     updateSource
     initDatabase
     runGulp
+    restartServer
+}
+
+function restartServer {
+    echo "- restarting server"
+    forever restartall
 }
 
 function updateSource {

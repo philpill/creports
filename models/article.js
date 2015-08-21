@@ -112,29 +112,52 @@ Article.prototype.getCountries = function () {
     return countries;
 }
 
-Article.prototype.getConflictRating = function () {
-
-    // console.log('getConflictRating()');
-
-    var article = this;
+function sanitiseText(text) {
 
     var lineBreaks = /\r?\n|\r/g;
 
     var punctuation = /[\.,-\/#!$%\^&\*;:{}=\-_`~()?'"]/g;
 
-    var story = article.data.story.replace(punctuation, ' ').replace(lineBreaks, ' ');
+    return text.replace(punctuation, ' ').replace(lineBreaks, ' ');
+}
 
-    var storyLength = story.split(' ').length;
+function isValidStory(story) {
+
+    var isValidStory = false;
+
+    var isMinimumLength = story && story.split(' ').length > 100;
+
+    if (isMinimumLength) {
+
+        isValidStory = true;
+    }
+
+    return isValidStory;
+}
+
+function getKeywordMatchLength (text, keyword) {
+
+    var matches = text.match(new RegExp('\\b' + keyword + '\\b', 'gi')) || [];
+
+    return matches.length;
+}
+
+function calculateRating (story, points) {
+
+    return points/story.split(' ').length;
+}
+
+Article.prototype.getConflictRating = function () {
+
+    // console.log('getConflictRating()');
+
+    var keywordTerm, rating, occurances;
+
+    var article = this;
+
+    var story = sanitiseText(article.data.story);
 
     var points = 0;
-
-    var keywordTerm;
-
-    var matches;
-
-    var rating;
-
-    var occurances = 0;
 
     var configKeywords = config.keywords || [];
 
@@ -144,20 +167,13 @@ Article.prototype.getConflictRating = function () {
 
         rating = data.keywordsData.ratings[keywordTerm];
 
-        matches = story.match(new RegExp('\\b' + keywordTerm + '\\b', 'gi')) || [];
-
         // limit repetitions
-        occurances = Math.min(matches.length, config.conflictKeywordRepetitionThreshold);
-
-        if (occurances) {
-
-            // console.log(keywordTerm);
-        }
+        occurances = Math.min(getKeywordMatchLength(story, keywordTerm), config.conflictKeywordRepetitionThreshold);
 
         points += (rating * occurances);
     }
 
-    return points && storyLength && storyLength > 100 ? points/story.split(' ').length : 0;
+    return points && isValidStory(story) ? calculateRating(story, points) : 0;
 }
 
 module.exports = Article;

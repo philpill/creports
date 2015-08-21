@@ -42,7 +42,11 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('./static/css'));
 });
 
-gulp.task('default', ['watch']);
+gulp.task('fonts', function () {
+    gulp.src('src/fonts/**/*').pipe(gulp.dest('./static/fonts'));
+});
+
+gulp.task('default', ['fonts', 'watch']);
 
 gulp.task('browserify', function() {
     browserify(PATH.input, {

@@ -4,9 +4,14 @@ $green: #008000; // Green
 $black: #000000; // Black
 $delay: 400ms;
 
+@font-face{
+    font-family: "Visitor TT1 BRK";
+    src: url('../fonts/visitor1.ttf')
+}
+
 html {
     background: $black;
-    font-family: "Courier New", Courier, monospace;
+    font-family: 'Visitor TT1 BRK', 'Courier New', Courier, monospace;
 }
 
 h1, h2 {
