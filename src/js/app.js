@@ -13,18 +13,24 @@
 
     var countries = {};
 
-    var countryCodes = _.filter(_.map(Datamap.prototype.worldTopo.objects.world.geometries, function (geometry) {
-        // console.log(geometry);
-        return geometry.id;
-    }), function (id) {
-        return id.match(/^[A-Z][A-Z][A-Z]$/);
-    });
+    var geometries = Datamap.prototype.worldTopo.objects.world.geometries;
+
+    var countryCodes = _.filter(_.map(geometries, getCountryCodeFromGeometryData), filterDisputedCountries);
 
     _.each(countryCodes, function (code) {
         countries[code] = 0;
     });
 
     console.log(countries);
+
+    // countries which are disputed (e.g. Kosovo) have country codes of -99 which we cannot parse
+    function filterDisputedCountries (id) {
+        return id.match(/^[A-Z][A-Z][A-Z]$/);
+    }
+
+    function getCountryCodeFromGeometryData (geometry) {
+        return geometry.id;
+    }
 
     function init () {
 
@@ -49,33 +55,7 @@
             },
             done: function(datamap) {
 
-                datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-
-                    console.log(geography);
-
-                    $('#Stories').removeClass('active');
-
-                    setTimeout(function () {
-
-                        var articles = articlesByCountry[geography.id];
-
-                        if (articles && articles.length > 0) {
-
-                            $('#Stories').addClass('active');
-
-                            document.getElementById('Articles').innerHTML = '';
-
-                            articles.forEach(function (article) {
-
-                                document.getElementById('Country').innerHTML = geography.properties.name;
-
-                                document.getElementById('Articles').innerHTML += '<li><a href="' + article.url + '">' + article.headline + '</a></li>';
-                            });
-                        }
-
-                    }, 600);
-
-                });
+                datamap.svg.selectAll('.datamaps-subunit').on('click', onDatamapCountryClick);
             }
         });
 
@@ -84,36 +64,62 @@
         bindEvents();
     }
 
-    function bindEvents () {
+    function onDatamapCountryClick (geography) {
 
-        $(window).on('resize', function () {
-            map.resize();
-        });
+        console.log(geography);
 
-        $('.source-check').on('change', function () {
+        $('#Stories').removeClass('active');
 
-            var filteredArticles = [];
+        setTimeout(function () {
 
-            var sources = $('.source-check:checked');
+            var articles = articlesByCountry[geography.id];
 
-            _.each(articles, function (article) {
+            if (articles && articles.length > 0) {
 
-                _.each(sources, function (source) {
+                $('#Stories').addClass('active');
 
-                    if (source.value === article.source) {
+                document.getElementById('Articles').innerHTML = '';
 
-                        filteredArticles.push(article);
-                    }
+                articles.forEach(function (article) {
 
+                    document.getElementById('Country').innerHTML = geography.properties.name;
+
+                    document.getElementById('Articles').innerHTML += '<li><a href="' + article.url + '">' + article.headline + '</a></li>';
                 });
-            });
+            }
 
-            resetMap();
-            updateMap(filteredArticles);
-        });
+        }, 600);
     }
 
-    function resetMap () {
+    function bindEvents () {
+
+        $(window).on('resize', map.resize.bind(map));
+
+        $('.source-check').on('change', updateSources);
+    }
+
+    function updateSources () {
+
+        var filteredArticles = [];
+
+        var sources = $('.source-check:checked');
+
+        _.each(articles, function (article) {
+
+            _.each(sources, function (source) {
+
+                if (source.value === article.source) {
+
+                    filteredArticles.push(article);
+                }
+            });
+        });
+
+        clearData();
+        updateMap(filteredArticles);
+    }
+
+    function clearData () {
 
         _.each(countryCodes, function (code) {
 
@@ -121,8 +127,6 @@
         });
 
         articlesByCountry = {};
-
-        map.updateChoropleth(countries);
     }
 
     function updateMap (articles) {
