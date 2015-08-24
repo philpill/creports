@@ -24,13 +24,19 @@
       ]
     }
   },
+  "aliasify": {
+    "aliases": {
+      "underscore": "lodash"
+    }
+  },
   "browserify": {
     "transform": [
-      "browserify-shim"
+      "browserify-shim",
+      "aliasify"
     ]
   },
   "dependencies": {
-    "aylien_textapi": "*",
+    "aliasify": "^1.7.2",
     "bower": "*",
     "browserify": "^10.0.0",
     "browserify-shim": "*",

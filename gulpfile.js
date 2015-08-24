@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
+    aliasify = require('aliasify'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
@@ -21,9 +22,12 @@ var libs = [
     PATH.lib + 'd3',
     PATH.lib + 'topojson',
     PATH.lib + 'datamaps/dist',
-    PATH.lib + 'jquery/dist/',
+    PATH.lib + 'jquery/dist',
     PATH.lib + 'lodash',
-    PATH.lib + 'normalize.css'
+    PATH.lib + 'normalize.css',
+    PATH.lib + 'backbone',
+    PATH.lib + 'marionette/lib',
+    PATH.lib + 'react'
 ];
 
 gulp.task('watch', function () {
@@ -51,6 +55,7 @@ gulp.task('default', ['fonts', 'watch']);
 gulp.task('browserify', function() {
     browserify(PATH.input, {
         paths: libs})
+        .transform(aliasify, {global: true})
         .bundle()
         .pipe(source(PATH.outputFile))
         .pipe(buffer())

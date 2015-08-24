@@ -23,6 +23,9 @@
     "topojson": null,
     "datamaps": null,
     "normalize.css" : null,
-    "lodash" : null
+    "lodash" : null,
+    "backbone": null,
+    "marionette": null,
+    "react": null
   }
 }

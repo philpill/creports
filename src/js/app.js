@@ -7,6 +7,12 @@
     require('topojson');
     require('datamaps.all.min');
 
+
+    require('backbone-min');
+    require('backbone.marionette.min');
+
+    require('react.min');
+
     var map;
 
     var articlesByCountry = {};
