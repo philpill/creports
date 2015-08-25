@@ -10,7 +10,9 @@
     var app = new Marionette.Application();
 
     app.addRegions({
-        appRegion: '#App'
+        appRegion: '#AppRegion',
+        articlesRegion: '#ArticlesRegion',
+        sourcesRegion: '#SourcesRegion'
     });
 
     // following example:
@@ -26,6 +28,10 @@
             console.log(articles);
 
             app.appRegion.show(new views.map());
+
+            app.articlesRegion.show(new views.articles());
+
+            app.sourcesRegion.show(new views.sources());
         });
     });
 

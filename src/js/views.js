@@ -11,111 +11,15 @@
     require('topojson');
     require('datamaps.all.min');
 
-    var map = Marionette.LayoutView.extend({
+    var sourcesView = Marionette.CompositeView.extend({
 
-        template: '#MapTemplate',
+        template : '#SourcesTemplate',
 
-        initialize: function () { console.log('main layout: initialize'); },
-        onRender: function () {
-
-            console.log('main layout: onRender');
-
-            var articleCollection = new collections.articles(articles);
-
-            console.log(articleCollection);
-        },
-
-        onShow: function () {
-
-            console.log('main layout: onShow');
-
-            var map, geometries,
-                countryCodes, articlesByCountry,
-                countries;
-
-            function initialiseData () {
-
-                countries = countries || {};
-
-                geometries = Datamap.prototype.worldTopo.objects.world.geometries;
-
-                countryCodes = _.filter(_.map(geometries, getCountryCodeFromGeometryData), filterDisputedCountries);
-
-                _.each(countryCodes, function (code) {
-                    countries[code] = 0;
-                });
-
-                console.log(countries);
-            }
-
-            function createMap (container) {
-
-                var options = {
-                    element : container,
-                    responsive : true,
-                    projection: 'mercator',
-                    geographyConfig : {
-                        borderColor: 'Green',
-                        highlightFillColor : 'Green',
-                        highlightBorderWidth : 1,
-                        popupOnHover: false
-                    },
-                    fills : {
-                        defaultFill : 'black'
-                    },
-                    done: function(datamap) {
-
-                        datamap.svg.selectAll('.datamaps-subunit').on('click', onDatamapCountryClick);
-                    }
-                };
-
-                return new Datamap(options);
-            }
-
-            // countries which are disputed (e.g. Kosovo) have country codes of -99 which we cannot parse
-            function filterDisputedCountries (id) {
-                return id.match(/^[A-Z][A-Z][A-Z]$/);
-            }
-
-            function getCountryCodeFromGeometryData (geometry) {
-                return geometry.id;
-            }
-
-            function onDatamapCountryClick (geography) {
-
-                console.log(geography);
-
-                $('#Stories').removeClass('active');
-
-                setTimeout(function () {
-
-                    var articles = articlesByCountry[geography.id];
-
-                    if (articles && articles.length > 0) {
-
-                        $('#Stories').addClass('active');
-
-                        document.getElementById('Articles').innerHTML = '';
-
-                        articles.forEach(function (article) {
-
-                            document.getElementById('Country').innerHTML = geography.properties.name;
-
-                            document.getElementById('Articles').innerHTML += '<li><a href="' + article.url + '">' + article.headline + '</a></li>';
-                        });
-                    }
-
-                }, 600);
-            }
-
-            function bindEvents () {
-
-                $(window).on('resize', map.resize.bind(map));
-
-                $('.source-check').on('change', updateSources);
-            }
+        onShow : function () {
 
             function updateSources () {
+
+                console.log('updateSources()');
 
                 var filteredArticles = [];
 
@@ -132,72 +36,189 @@
                     });
                 });
 
-                clearData();
-
-                updateMap(filteredArticles);
+                Backbone.trigger('sources:updated', filteredArticles);
             }
 
-            function clearData () {
-
-                _.each(countryCodes, function (code) {
-
-                    countries[code] = 0;
-                });
-
-                articlesByCountry = {};
-            }
-
-            function updateMap (articles) {
-
-                console.log('updateMap()');
-
-                articlesByCountry = articlesByCountry || {};
-
-                articles.forEach(function (article) {
-
-                    article.countries.forEach(function (country) {
-                        if (country.code) {
-                            articlesByCountry[country.code] = articlesByCountry[country.code] || [];
-                            articlesByCountry[country.code].push({
-                                url : article.url,
-                                headline : article.headline,
-                                story : article.story
-                            });
-                            countries[country.code] = countries[country.code] ? countries[country.code] + 0.15 : 0.15;
-                        }
-                    });
-                });
-
-                Object.keys(countries).forEach(function(country, index) {
-
-                    var frequency = countries[country];
-
-                    var color = 'rgba(255, 0, 0, ' + frequency + ')';
-
-                    countries[country] = color;
-                });
-
-                console.log(countries);
-
-                console.log(articlesByCountry);
-
-                map.updateChoropleth(countries);
-            }
-
-            initialiseData();
-
-            map = createMap($('#Map')[0]);
-
-            updateMap(articles);
-
-            bindEvents();
+            $('.source-check').on('change', updateSources);
         }
+    });
 
+    var articlesView = Marionette.CompositeView.extend({
+        template: "#ArticlesTemplate"
+    });
+
+    var mapView = Marionette.LayoutView.extend({
+
+        template: '#MapTemplate',
+
+        initialize: function () {
+
+            this.countries = this.countries || {};
+
+            this.geometries = Datamap.prototype.worldTopo.objects.world.geometries;
+
+            function getCountryCodeFromGeometryData (geometry) {
+                return geometry.id;
+            }
+
+            // countries which are disputed (e.g. Kosovo) have country codes of -99 which we cannot parse
+            function filterDisputedCountries (id) {
+                return id.match(/^[A-Z][A-Z][A-Z]$/);
+            }
+
+            this.countryCodes = _.filter(_.map(this.geometries, getCountryCodeFromGeometryData), filterDisputedCountries);
+
+            var that = this;
+
+            _.each(that.countryCodes, function (code) {
+                that.countries[code] = 0;
+            });
+
+            console.log(that.countries);
+
+            this.listenTo(Backbone, 'sources:updated', function (articles) { that.clearData(); that.updateMap(articles); });
+        },
+        onRender: function () {
+
+            console.log('main layout: onRender');
+
+            var articleCollection = new collections.articles(articles);
+
+            console.log(articleCollection);
+
+            var that = this;
+
+            $(window).on('resize', function () {
+
+                that.map.resize();
+            });
+        },
+
+        onShow: function () {
+
+            console.log('main layout: onShow');
+
+            var that = this;
+
+            that.map = that.createMap($('#Map')[0]);
+
+            this.updateMap(articles);
+        },
+
+        clearData : function () {
+
+            var that = this;
+
+            _.each(that.countryCodes, function (code) {
+
+                that.countries[code] = 0;
+            });
+
+            that.articlesByCountry = {};
+        },
+
+        onDatamapCountryClick : function (geography) {
+
+            console.log(geography);
+
+            var that = this;
+
+            $('#Stories').removeClass('active');
+
+            setTimeout(function () {
+
+                var articles = that.articlesByCountry[geography.id];
+
+                if (articles && articles.length > 0) {
+
+                    $('#Stories').addClass('active');
+
+                    document.getElementById('Articles').innerHTML = '';
+
+                    articles.forEach(function (article) {
+
+                        document.getElementById('Country').innerHTML = geography.properties.name;
+
+                        document.getElementById('Articles').innerHTML += '<li><a href="' + article.url + '">' + article.headline + '</a></li>';
+                    });
+                }
+
+            }, 600);
+        },
+
+        createMap: function (container) {
+
+            var that = this;
+
+            var options = {
+                element : container,
+                responsive : true,
+                projection: 'mercator',
+                geographyConfig : {
+                    borderColor: 'Green',
+                    highlightFillColor : 'Green',
+                    highlightBorderWidth : 1,
+                    popupOnHover: false
+                },
+                fills : {
+                    defaultFill : 'black'
+                },
+                done: function(datamap) {
+
+                    datamap.svg.selectAll('.datamaps-subunit').on('click', that.onDatamapCountryClick.bind(that));
+                }
+            };
+
+            return new Datamap(options);
+        },
+
+        updateMap: function (articles) {
+
+            console.log('updateMap()');
+
+            var that = this;
+
+            articles = articles || [];
+
+            that.articlesByCountry = that.articlesByCountry || {};
+
+            articles.forEach(function (article) {
+
+                article.countries.forEach(function (country) {
+                    if (country.code) {
+                        that.articlesByCountry[country.code] = that.articlesByCountry[country.code] || [];
+                        that.articlesByCountry[country.code].push({
+                            url : article.url,
+                            headline : article.headline,
+                            story : article.story
+                        });
+                        that.countries[country.code] = that.countries[country.code] ? that.countries[country.code] + 0.15 : 0.15;
+                    }
+                });
+            });
+
+            Object.keys(that.countries).forEach(function(country, index) {
+
+                var frequency = that.countries[country];
+
+                var color = 'rgba(255, 0, 0, ' + frequency + ')';
+
+                that.countries[country] = color;
+            });
+
+            console.log(that.countries);
+
+            console.log(that.articlesByCountry);
+
+            that.map.updateChoropleth(that.countries);
+        }
     });
 
     module.exports = {
 
-        map : map
+        map : mapView,
+        articles : articlesView,
+        sources : sourcesView
     };
 
 })(document, articles);

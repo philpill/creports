@@ -8,11 +8,11 @@ html(lang="en")
         h1
             a(href="http://conflictingreports.co.uk") Conflicting Reports
         div#Container
-            div#App
+            div#AppRegion
+            div#ArticlesRegion
+            div#SourcesRegion
+        script#SourcesTemplate(type="text/template")
             div#Overlay
-                div#Stories
-                    h2#Country
-                    ul#Articles
                 ul#Sources
                     - for (var i = 0; i < sources.length; i++)
                         li
@@ -21,6 +21,10 @@ html(lang="en")
                             a(href="#{ sources[i].domain }") !{ sources[i].name }
         script#MapTemplate(type="text/template")
             div#Map
+        script#ArticlesTemplate(type="text/template")
+            div#Stories
+                h2#Country
+                ul#Articles
     script.
         var articles = !{articles};
     script(src='/static/js/creports.js')
