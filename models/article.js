@@ -147,6 +147,13 @@ function calculateRating (story, points) {
     return points/story.split(' ').length;
 }
 
+function roundToTwoDecimalPlaces (num) {
+
+    num = num || 0;
+
+    return Math.round(num * 100) / 100;
+}
+
 Article.prototype.getConflictRating = function () {
 
     // console.log('getConflictRating()');
@@ -171,6 +178,8 @@ Article.prototype.getConflictRating = function () {
         occurances = Math.min(getKeywordMatchLength(story, keywordTerm), config.conflictKeywordRepetitionThreshold);
 
         points += (rating * occurances);
+
+        points = roundToTwoDecimalPlaces(points);
     }
 
     return points && isValidStory(story) ? calculateRating(story, points) : 0;

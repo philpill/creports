@@ -15,31 +15,30 @@
 
         template : '#SourcesTemplate',
 
-        onShow : function () {
+        events : {
+            'change .source-check': 'updateSources'
+        },
 
-            function updateSources () {
+        updateSources : function () {
 
-                console.log('updateSources()');
+            console.log('updateSources()');
 
-                var filteredArticles = [];
+            var filteredArticles = [];
 
-                var sources = $('.source-check:checked');
+            var sources = $('.source-check:checked');
 
-                _.each(articles, function (article) {
+            _.each(articles, function (article) {
 
-                    _.each(sources, function (source) {
+                _.each(sources, function (source) {
 
-                        if (source.value === article.source) {
+                    if (source.value === article.source) {
 
-                            filteredArticles.push(article);
-                        }
-                    });
+                        filteredArticles.push(article);
+                    }
                 });
+            });
 
-                Backbone.trigger('sources:updated', filteredArticles);
-            }
-
-            $('.source-check').on('change', updateSources);
+            Backbone.trigger('sources:updated', filteredArticles);
         }
     });
 
@@ -80,8 +79,6 @@
         },
         onRender: function () {
 
-            console.log('main layout: onRender');
-
             var articleCollection = new collections.articles(articles);
 
             console.log(articleCollection);
@@ -96,11 +93,7 @@
 
         onShow: function () {
 
-            console.log('main layout: onShow');
-
-            var that = this;
-
-            that.map = that.createMap($('#Map')[0]);
+            this.map = this.createMap($('#Map')[0]);
 
             this.updateMap(articles);
         },

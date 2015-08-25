@@ -287,7 +287,8 @@ config.keywords = [
     { relevance : 9, term : 'militia' },
     { relevance : 4, term : 'fighters' },
     { relevance : 3, term : 'hostage' },
-    { relevance : 3, term : 'hostages' }
+    { relevance : 3, term : 'hostages' },
+    { relevance : 5, term : 'military' }
 ];
 
 config.conflictThreshold =  0.05;
@@ -363,6 +364,20 @@ config.channels = [{
     article : {
         headline : 'h1.title',
         story : '#main p'
+    }
+}, {
+    name : 'CNN',
+    id : 'SourceCNN',
+    enabled : true,
+    domain : 'http://edition.cnn.com/',
+    url : 'http://rss.cnn.com/rss/edition_world.rss',
+    articleUrl : 'channel > item > guid',
+    isUrlAttribute : false,
+    isXml : true,
+    isConflict : false,
+    article : {
+        headline : 'h1.pg-headline',
+        story : '#body-text p'
     }
 }];
 
