@@ -11,6 +11,7 @@ function init {
     echo "------------------------------"
     cd $APP_PATH
     updateSource
+    updatePackages
     initDatabase
     runGulp
     restartServer
@@ -24,6 +25,11 @@ function restartServer {
 function updateSource {
     echo "- update source"
     git pull
+}
+
+function updatePackages {
+    echo "- update packages"
+    npm install
 }
 
 function runGulp {

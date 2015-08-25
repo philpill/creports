@@ -2,7 +2,8 @@ var express = require('express'),
     router = express.Router(),
     mongojs = require('mongojs'),
     _ = require('lodash'),
-    config = require('../config');
+    config = require('../config'),
+    pjson = require('../package.json');
 
 var db = mongojs('creports');
 
@@ -66,7 +67,7 @@ router.get('/', function(req, res) {
             };
         });
 
-        res.render('index', { articles : JSON.stringify(docs), sources : configChannels });
+        res.render('index', { articles : JSON.stringify(docs), sources : configChannels, version: pjson.version });
     });
 });
 
