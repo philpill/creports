@@ -7,10 +7,11 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     watch = require('gulp-watch'),
     batch = require('gulp-batch'),
-    sass = require('gulp-sass');
+    sass = require('gulp-sass'),
+    glob = require('glob');
 
 var PATH = {
-    input : './src/js/app.js',
+    input : './src/js/**/*.js',
     outputPath : './static/js/',
     outputFile : 'creports.js',
     lib : './bower_components/',
@@ -53,7 +54,7 @@ gulp.task('fonts', function () {
 gulp.task('default', ['fonts', 'watch']);
 
 gulp.task('browserify', function() {
-    browserify(PATH.input, {
+    return browserify(glob.sync(PATH.input), {
         paths: libs})
         .transform(aliasify, {global: true})
         .bundle()

@@ -19,8 +19,8 @@ html(lang="en")
                             input.source-check(type='checkbox', id='#{ sources[i].id }', checked='checked', value='#{ sources[i].name }')
                             label.source-switch(for='#{ sources[i].id }')
                             a(href="#{ sources[i].domain }") !{ sources[i].name }
-        script#MapTemplate(type="text/template").
-            <div id="Map"></div>
+        script#MapTemplate(type="text/template")
+            div#Map
     script.
         var articles = !{articles};
     script(src='/static/js/creports.js')
