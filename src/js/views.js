@@ -52,11 +52,27 @@
 
     var articlesView = Marionette.CompositeView.extend({
 
-        template: '#ArticlesTemplate',
+        template : '#ArticlesTemplate',
 
-        childView: articleView,
+        childView : articleView,
 
-        childViewContainer: 'ul#Articles'
+        childViewContainer : 'ul#Articles',
+
+        initialize : function () {
+
+            var that = this;
+
+            that.listenTo(Backbone, 'countries:selected', function (articles, country) {
+
+                this.model = country;
+
+                this.collection = articles;
+
+                this.render();
+
+                $('#Stories').toggleClass('active', this.collection.length);
+            });
+        }
     });
 
     var mapView = Marionette.LayoutView.extend({
@@ -127,27 +143,14 @@
 
             var that = this;
 
-            $('#Stories').removeClass('active');
+            var country = new models.country({
+                name : geography.properties.name,
+                code : geography.id
+            });
 
-            setTimeout(function () {
+            var articles = new collections.articles(that.articlesByCountry[geography.id]);
 
-                var articles = that.articlesByCountry[geography.id];
-
-                if (articles && articles.length > 0) {
-
-                    $('#Stories').addClass('active');
-
-                    document.getElementById('Articles').innerHTML = '';
-
-                    articles.forEach(function (article) {
-
-                        document.getElementById('Country').innerHTML = geography.properties.name;
-
-                        document.getElementById('Articles').innerHTML += '<li><a href="' + article.url + '">' + article.headline + '</a></li>';
-                    });
-                }
-
-            }, 600);
+            Backbone.trigger('countries:selected', articles, country);
         },
 
         createMap: function (container) {

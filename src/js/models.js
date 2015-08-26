@@ -17,9 +17,17 @@
         }
     });
 
+    var country = Backbone.Model.extend({
+        defaults : {
+            name : '',
+            code : ''
+        }
+    });
+
     module.exports = {
 
-        article : article
+        article : article,
+        country : country
     };
 
 })(document);
