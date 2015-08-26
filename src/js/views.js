@@ -5,6 +5,7 @@
         React = require('react.min'),
         Backbone = require('backbone-min'),
         Marionette = require('backbone.marionette.min'),
+        models = require('./models'),
         collections = require('./collections');
 
     require('d3.min');
@@ -42,8 +43,20 @@
         }
     });
 
+    var articleView = Marionette.ItemView.extend({
+
+        tagName: "li",
+
+        template: "#ArticleTemplate"
+    });
+
     var articlesView = Marionette.CompositeView.extend({
-        template: "#ArticlesTemplate"
+
+        template: '#ArticlesTemplate',
+
+        childView: articleView,
+
+        childViewContainer: 'ul#Articles'
     });
 
     var mapView = Marionette.LayoutView.extend({
@@ -80,8 +93,6 @@
         onRender: function () {
 
             var articleCollection = new collections.articles(articles);
-
-            console.log(articleCollection);
 
             var that = this;
 
@@ -211,6 +222,7 @@
 
         map : mapView,
         articles : articlesView,
+        article : articleView,
         sources : sourcesView
     };
 

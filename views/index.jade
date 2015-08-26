@@ -25,6 +25,8 @@ html(lang="en")
             div#Stories
                 h2#Country
                 ul#Articles
+        script#ArticleTemplate(type="text/template")
+            a(href='<%= url %>') <%= headline %>
     script.
         var articles = !{articles};
     script(src='/static/js/creports.js')

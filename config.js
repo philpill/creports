@@ -379,6 +379,76 @@ config.channels = [{
         headline : 'h1.pg-headline',
         story : '#body-text p'
     }
+}, {
+    name : 'Washington Post',
+    id : 'SourceWashingtonPost',
+    enabled : true,
+    domain : 'http://washingtonpost.com',
+    url : 'http://feeds.washingtonpost.com/rss/world',
+    articleUrl : 'channel > item > link',
+    isUrlAttribute : false,
+    isXml : true,
+    isConflict : false,
+    article : {
+        headline : '#article-topper h1',
+        story : '#article-body p'
+    }
+}, {
+    name : 'Guardian',
+    id : 'SourceGuardian',
+    enabled : true,
+    domain : 'http://www.theguardian.com',
+    url : 'http://www.theguardian.com/world/rss',
+    articleUrl : 'channel > item > guid',
+    isUrlAttribute : false,
+    isXml : true,
+    isConflict : false,
+    article : {
+        headline : 'h1.content__headline',
+        story : '.content__article-body p'
+    }
+}, {
+    name : 'Xinhua',
+    id : 'SourceXinhua',
+    enabled : true,
+    domain : 'http://www.xinhuanet.com',
+    url : 'http://www.xinhuanet.com/english/rss/worldrss.xml',
+    articleUrl : 'channel > item > link',
+    isUrlAttribute : false,
+    isXml : true,
+    isConflict : false,
+    article : {
+        headline : '#Title',
+        story : '#Content p'
+    }
+}, {
+    name : 'Telegraph',
+    id : 'SourceTelegraph',
+    enabled : true,
+    domain : 'http://www.telegraph.co.uk',
+    url : 'http://www.telegraph.co.uk/news/worldnews/rss',
+    articleUrl : 'channel > item > guid',
+    isUrlAttribute : false,
+    isXml : true,
+    isConflict : false,
+    article : {
+        headline : '.storyHead h1',
+        story : '#mainBodyArea p'
+    }
+}, {
+    name : 'Pravdu',
+    id : 'SourcePravdu',
+    enabled : true,
+    domain : 'http://english.pravda.ru/',
+    url : 'http://english.pravda.ru/world/export-articles.xml',
+    articleUrl : 'channel > item > link',
+    isUrlAttribute : false,
+    isXml : true,
+    isConflict : false,
+    article : {
+        headline : '#article h1',
+        story : '#article p'
+    }
 }];
 
 
