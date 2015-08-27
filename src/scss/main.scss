@@ -87,63 +87,33 @@ a {
     }
 }
 
-#Overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    pointer-events: none;
-}
-
-#Stories {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin: 0;
-    z-index: 1;
-    padding: 20px;
-    transition: border-color $delay;
-    border: solid 1px $black;
-    pointer-events: none;
-    h2, a {
-        transition: color $delay;
-        color: $black;
-    }
-    &.active {
-        pointer-events: auto;
-        background: $black;
-        border: solid 1px $green;
-        h2 {
-            color: $green;
-        }
-        a {
-            color: $green;
-            &:hover {
-                color: $black;
-            }
-        }
-    }
-}
-
-#Country {
-
-
-}
-
 #Articles {
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    border: solid 1px $green;
+    background: $black;
+    h2 {
+        color: $green;
+    }
+    a {
+        color: $green;
+        &:hover {
+            color: $black;
+        }
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+    }
 }
 
 #Sources {
-    pointer-events: auto;
-    position: absolute;
-    top: 70%;
-    left: 0;
-    border: solid 1px $green;
-    padding: 20px;
-    background: $black;
+    display: inline-block;
+    ul {
+        border: solid 1px $green;
+        padding: 20px;
+        background: $black;
+    }
 }
 
 #Container {

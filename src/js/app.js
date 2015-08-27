@@ -5,21 +5,23 @@
         React = require('react.min'),
         Backbone = require('backbone-min'),
         Marionette = require('backbone.marionette.min'),
-        views = require('./views');
+        map = require('./map/views'),
+        article = require('./articles/views'),
+        sources = require('./sources/views');
 
     var app = new Marionette.Application();
 
     app.addRegions({
-        appRegion: '#AppRegion',
-        articlesRegion: '#ArticlesRegion',
-        sourcesRegion: '#SourcesRegion'
+        appRegion: '#App',
+        articlesRegion: '#Articles',
+        sourcesRegion: '#Sources'
     });
 
     // following example:
     // http://www.eccesignum.org/blog/simple-marionettejs-model-collection-and-collectionview-example
     app.module('App',function(module, App, Backbone, Marionette, $, _) {
 
-        module.AppLayoutView = views.map;
+        module.AppLayoutView = map;
 
         module.addInitializer(function() {
 
@@ -27,11 +29,11 @@
 
             console.log(articles);
 
-            app.appRegion.show(new views.map());
+            app.appRegion.show(new map());
 
-            app.articlesRegion.show(new views.articles());
+            app.articlesRegion.show(new article());
 
-            app.sourcesRegion.show(new views.sources());
+            app.sourcesRegion.show(new sources());
         });
     });
 

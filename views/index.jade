@@ -8,25 +8,21 @@ html(lang="en")
         h1
             a(href="http://conflictingreports.co.uk") Conflicting Reports v#{ version }
         div#Container
-            div#AppRegion
-            div#ArticlesRegion
-            div#SourcesRegion
+            div#App
+            div#Sources
+            div#Articles
         script#SourcesTemplate(type="text/template")
-            div#Overlay
-                ul#Sources
-                    - for (var i = 0; i < sources.length; i++)
-                        li
-                            input.source-check(type='checkbox', id='#{ sources[i].id }', checked='checked', value='#{ sources[i].name }')
-                            label.source-switch(for='#{ sources[i].id }')
-                            a(href="#{ sources[i].domain }") !{ sources[i].name }
+            - for (var i = 0; i < sources.length; i++)
+                li
+                    input.source-check(type='checkbox', id='#{ sources[i].id }', checked='checked', value='#{ sources[i].name }')
+                    label.source-switch(for='#{ sources[i].id }')
+                    a(href="#{ sources[i].domain }") !{ sources[i].name }
         script#MapTemplate(type="text/template")
-            div#Map
         script#ArticlesTemplate(type="text/template")
-            div#Stories
-                h2#Country <%= name %>
-                ul#Articles
+            h2 <%= name %>
+            ul
         script#ArticleTemplate(type="text/template")
-            a(href='<%= url %>') <%= headline %>
+            a(href!='<%= url %>') <%= headline %>
     script.
         var articles = !{articles};
     script(src='/static/js/creports.js')

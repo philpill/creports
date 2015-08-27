@@ -6,78 +6,17 @@
         Backbone = require('backbone-min'),
         Marionette = require('backbone.marionette.min'),
         models = require('./models'),
-        collections = require('./collections');
+        articlesCollection = require('../articles/collections');
 
     require('d3.min');
     require('topojson');
     require('datamaps.all.min');
 
-    var sourcesView = Marionette.CompositeView.extend({
+    var view = Marionette.LayoutView.extend({
 
-        template : '#SourcesTemplate',
+        template: _.template(''),
 
-        events : {
-            'change .source-check': 'updateSources'
-        },
-
-        updateSources : function () {
-
-            console.log('updateSources()');
-
-            var filteredArticles = [];
-
-            var sources = $('.source-check:checked');
-
-            _.each(articles, function (article) {
-
-                _.each(sources, function (source) {
-
-                    if (source.value === article.source) {
-
-                        filteredArticles.push(article);
-                    }
-                });
-            });
-
-            Backbone.trigger('sources:updated', filteredArticles);
-        }
-    });
-
-    var articleView = Marionette.ItemView.extend({
-
-        tagName: "li",
-
-        template: "#ArticleTemplate"
-    });
-
-    var articlesView = Marionette.CompositeView.extend({
-
-        template : '#ArticlesTemplate',
-
-        childView : articleView,
-
-        childViewContainer : 'ul#Articles',
-
-        initialize : function () {
-
-            var that = this;
-
-            that.listenTo(Backbone, 'countries:selected', function (articles, country) {
-
-                this.model = country;
-
-                this.collection = articles;
-
-                this.render();
-
-                $('#Stories').toggleClass('active', this.collection.length);
-            });
-        }
-    });
-
-    var mapView = Marionette.LayoutView.extend({
-
-        template: '#MapTemplate',
+        id : 'Map',
 
         initialize: function () {
 
@@ -108,7 +47,7 @@
         },
         onRender: function () {
 
-            var articleCollection = new collections.articles(articles);
+            var articleCollection = new articlesCollection.articles(articles);
 
             var that = this;
 
@@ -148,7 +87,7 @@
                 code : geography.id
             });
 
-            var articles = new collections.articles(that.articlesByCountry[geography.id]);
+            var articles = new articlesCollection.articles(that.articlesByCountry[geography.id]);
 
             Backbone.trigger('countries:selected', articles, country);
         },
@@ -221,12 +160,6 @@
         }
     });
 
-    module.exports = {
-
-        map : mapView,
-        articles : articlesView,
-        article : articleView,
-        sources : sourcesView
-    };
+    module.exports = view;
 
 })(document, articles);

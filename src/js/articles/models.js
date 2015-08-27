@@ -1,9 +1,6 @@
 (function (document) {
 
-    var $ = require('jquery.min'),
-        _ = require('lodash.min'),
-        React = require('react.min'),
-        Backbone = require('backbone-min'),
+    var Backbone = require('backbone-min'),
         Marionette = require('backbone.marionette.min');
 
 
@@ -17,17 +14,8 @@
         }
     });
 
-    var country = Backbone.Model.extend({
-        defaults : {
-            name : '',
-            code : ''
-        }
-    });
-
     module.exports = {
-
-        article : article,
-        country : country
+        article : article
     };
 
 })(document);

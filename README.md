@@ -1,4 +1,4 @@
-![https://travis-ci.org/philpill/creports](https://travis-ci.org/philpill/creports.svg?branch=master)
+[![https://travis-ci.org/philpill/creports](https://travis-ci.org/philpill/creports.svg?branch=master)](https://travis-ci.org/philpill/creports)
 
 # conflicting reports
 
