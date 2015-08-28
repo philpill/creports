@@ -16,7 +16,7 @@ var PATH = {
     outputFile : 'creports.js',
     lib : './bower_components/',
     watchJS : ['src/js/**', 'bower_components/**/*.js'],
-    watchSCSS : ['bower_components/**/*.{sass,css}', 'src/scss/**'],
+    watchSCSS : ['bower_components/**/*.{sass,css}', 'src/scss/**/*.scss'],
 }
 
 var libs = [
@@ -41,7 +41,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('sass', function () {
-    gulp.src(PATH.watchSCSS)
+    gulp.src('src/scss/main.scss')
         .pipe(sass())
         .pipe(concat('main.css'))
         .pipe(gulp.dest('./static/css'));

@@ -1,0 +1,19 @@
+.region-articles {
+    margin: 0;
+    padding: 20px;
+    border: solid 1px $green;
+    background: $black;
+    h2 {
+        color: $green;
+    }
+    a {
+        color: $green;
+        &:hover {
+            color: $black;
+        }
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+}

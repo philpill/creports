@@ -5,24 +5,16 @@ html(lang="en")
         title Conflicting Reports
         link(href='/static/css/main.css', rel='stylesheet')
     body
-        h1
-            a(href="http://conflictingreports.co.uk") Conflicting Reports v#{ version }
         div#Container
-            div#App
-            div#Sources
-            div#Articles
-        script#SourcesTemplate(type="text/template")
-            - for (var i = 0; i < sources.length; i++)
-                li
-                    input.source-check(type='checkbox', id='#{ sources[i].id }', checked='checked', value='#{ sources[i].name }')
-                    label.source-switch(for='#{ sources[i].id }')
-                    a(href="#{ sources[i].domain }") !{ sources[i].name }
-        script#MapTemplate(type="text/template")
-        script#ArticlesTemplate(type="text/template")
-            h2 <%= name %>
-            ul
-        script#ArticleTemplate(type="text/template")
-            a(href!='<%= url %>') <%= headline %>
-    script.
-        var articles = !{articles};
-    script(src='/static/js/creports.js')
+            h1
+                a(href="http://conflictingreports.co.uk") Conflicting Reports v#{ version }
+            div.region-map
+            div.region-controls
+            div.region-articles
+        include ./templates/article.jade
+        include ./templates/articles.jade
+        include ./templates/map.jade
+        include ./templates/controls.jade
+        script.
+            var articles = !{articles};
+        script(src='/static/js/creports.js')

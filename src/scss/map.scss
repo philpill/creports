@@ -1,0 +1,15 @@
+.region-map {
+    margin-bottom: 20px;
+}
+
+@media (min-width: 1024px) {
+    .region-map {
+        width : 64%;
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+#Map {
+    width: 100%;
+}

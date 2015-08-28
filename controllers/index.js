@@ -34,40 +34,57 @@ router.get('/', function(req, res) {
         _id :0
     };
 
-    articles.find(criteria, projection, function (err, docs) {
+    articles.find(function (err, unfiltered) {
 
-        var sources = [];
+        articles.find(criteria, projection, function (err, docs) {
 
-        var configChannels = [];
+            var sources = [];
 
-        docs.forEach(function (doc) {
+            var configChannels = [];
 
-            doc.headline = doc.data.headline;
-            doc.story = doc.data.story;
+            docs.forEach(function (doc) {
 
-            sources.push(doc.source);
+                doc.headline = doc.data.headline;
+                doc.story = doc.data.story;
 
-            delete doc.data;
+                sources.push(doc.source);
 
-            return doc;
+                delete doc.data;
+
+                return doc;
+            });
+
+            sources = _.uniq(sources);
+
+            _.each(sources, function (source) {
+
+                var configChannel = _.find(config.channels, function(channel) { return channel.name === source });
+
+                if (configChannel) {
+                    configChannels.push({
+                        name : configChannel.name,
+                        domain : configChannel.domain,
+                        id : configChannel.id
+                    });
+                };
+            });
+
+            var numArticles = unfiltered ? unfiltered.length : 0;
+
+            var numConflicts = docs ? docs.length : 0;
+
+            var intensity = numArticles && numConflicts ? (numConflicts/numArticles).toFixed(2) : 0;
+
+            res.render('index', {
+
+                articles : JSON.stringify(docs),
+                sources : configChannels,
+                version: pjson.version,
+                numArticles : numArticles,
+                numConflicts : numConflicts,
+                intensity : intensity
+            });
         });
-
-        sources = _.uniq(sources);
-
-        _.each(sources, function (source) {
-
-            var configChannel = _.find(config.channels, function(channel) { return channel.name === source });
-
-            if (configChannel) {
-                configChannels.push({
-                    name : configChannel.name,
-                    domain : configChannel.domain,
-                    id : configChannel.id
-                });
-            };
-        });
-
-        res.render('index', { articles : JSON.stringify(docs), sources : configChannels, version: pjson.version });
     });
 });
 

@@ -7,9 +7,7 @@
 
     var view = Marionette.CompositeView.extend({
 
-        template : '#SourcesTemplate',
-
-        el : 'ul',
+        template : '#ControlsTemplate',
 
         events : {
             'change .source-check': 'updateSources'
@@ -35,6 +33,17 @@
             });
 
             Backbone.trigger('sources:updated', filteredArticles);
+        },
+
+        onShow: function () {
+
+            console.log('onRender()');
+
+            var $cell = $('.intensity');
+
+            var intensity = $cell.data('intensity');
+
+            $cell.html('<span style="background-color: rgba(255,0,0,' + intensity +')"></span>' + (intensity*100).toFixed(2) + '%');
         }
     });
 

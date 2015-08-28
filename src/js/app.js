@@ -7,14 +7,14 @@
         Marionette = require('backbone.marionette.min'),
         map = require('./map/views'),
         article = require('./articles/views'),
-        sources = require('./sources/views');
+        controls = require('./controls/views');
 
     var app = new Marionette.Application();
 
     app.addRegions({
-        appRegion: '#App',
-        articlesRegion: '#Articles',
-        sourcesRegion: '#Sources'
+        mapRegion: '.region-map',
+        articlesRegion: '.region-articles',
+        controlsRegion: '.region-controls'
     });
 
     // following example:
@@ -29,11 +29,11 @@
 
             console.log(articles);
 
-            app.appRegion.show(new map());
+            app.mapRegion.show(new map());
 
             app.articlesRegion.show(new article());
 
-            app.sourcesRegion.show(new sources());
+            app.controlsRegion.show(new controls());
         });
     });
 

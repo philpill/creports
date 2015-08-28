@@ -1,0 +1,21 @@
+script#ControlsTemplate(type="text/template")
+    ul.sources
+        - for (var i = 0; i < sources.length; i++)
+            li
+                input.source-check(type='checkbox', id='#{ sources[i].id }', checked='checked', value='#{ sources[i].name }')
+                label.source-switch(for='#{ sources[i].id }')
+                a(href="#{ sources[i].domain }") !{ sources[i].name }
+    div.info
+        table
+            tr
+                td articles
+                td #{ numArticles }
+            tr
+                td conflict reports
+                td #{ numConflicts }
+            tr
+                td global intensity
+                td.intensity(data-intensity='#{ intensity }') #{ intensity }
+            tr
+                td next update
+                td 12:27:35
