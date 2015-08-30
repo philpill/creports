@@ -65,6 +65,58 @@
     }
 }
 
+.nav {
+    margin: 0 0 20px 0;
+}
 
+.navControls {
+    border: 1px solid $green;
+    width: 13%;
+    margin-right: 5%;
+    height: 177px;
+    display: inline-block;
+    vertical-align: top;
+}
 
+#Nav {
+    display: inline-block;
+    width: 80%;
+    border: 1px solid $green;
+    pointer-events: none;
+}
 
+.zoomLevel {
+    margin: 0;
+    padding: 0;
+}
+
+.zoomLevel li {
+    display: block;
+    border: 1px solid $green;
+    height: 5px;
+    margin: 5px;
+    &:hover {
+        cursor: pointer;
+        animation-name: pulse;
+        animation-duration: 0.5s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-delay: 0.5s
+    }
+}
+
+.zoomButton {
+    display: block;
+    border: 1px solid $green;
+    padding: 2px;
+    text-align: center;
+    margin: 5px;
+    &:hover {
+        cursor: pointer;
+        animation-name: pulse;
+        animation-duration: 0.5s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-delay: 0.5s
+    }
+}

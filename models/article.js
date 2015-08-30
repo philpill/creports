@@ -21,9 +21,9 @@ var Article = function (url, data) {
 
 Article.prototype.scrape = function () {
 
-    console.log('scrape()');
+    // console.log('scrape()');
 
-    console.log(this.url);
+    // console.log(this.url);
 
     var dfd = q.defer();
 
@@ -72,7 +72,7 @@ Article.prototype.interpret = function () {
         var conflictRating = article.getConflictRating();
 
         // http://misc.flogisoft.com/bash/tip_colors_and_formatting#foreground_text
-        console.log('CONFLICT RATING: \033[31m', conflictRating, '\033[0m');
+        // console.log('CONFLICT RATING: \033[31m', conflictRating, '\033[0m');
 
         article.isConflict = conflictRating > config.conflictThreshold;
     }

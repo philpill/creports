@@ -41,17 +41,17 @@ gulp.task('watch', function () {
 });
 
 gulp.task('sass', function () {
-    gulp.src('src/scss/main.scss')
+    return gulp.src('src/scss/main.scss')
         .pipe(sass())
         .pipe(concat('main.css'))
         .pipe(gulp.dest('./static/css'));
 });
 
 gulp.task('fonts', function () {
-    gulp.src('src/fonts/**/*').pipe(gulp.dest('./static/fonts'));
+    return gulp.src('src/fonts/**/*').pipe(gulp.dest('./static/fonts'));
 });
 
-gulp.task('default', ['fonts', 'watch']);
+gulp.task('default', ['fonts', 'sass', 'browserify', 'watch']);
 
 gulp.task('browserify', function() {
     return browserify(glob.sync(PATH.input), {

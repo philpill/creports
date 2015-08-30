@@ -342,7 +342,7 @@ config.channels = [{
     id : 'SourceWikinews',
     enabled : true,
     domain : 'https://en.wikinews.org/',
-    url : 'https://en.wikinews.org/w/index.php?title=Special:NewsFeed&feed=atom&categories=Published%7CPolitics_and_conflicts&notcategories=No%20publish%7Cdisputed&namespace=0&count=15&ordermethod=categoryadd&stablepages=only',
+    url : 'https://en.wikinews.org/w/index.php?title=Special:NewsFeed&feed=atom&categories=Published%7CPolitics_and_conflicts&notcategories=No%20publish%7Cdisputed&namespace=0&ordermethod=categoryadd&stablepages=only',
     articleUrl : 'feed > entry > id',
     isUrlAttribute : false,
     isXml : true,

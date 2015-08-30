@@ -29,9 +29,9 @@ Channel.prototype.getFeed = function () {
 
   var dfd = q.defer();
 
-  console.log('channel.getFeed()');
+  // console.log('channel.getFeed()');
 
-  console.log(this.url);
+  // console.log(this.url);
 
   request(this.url, function (error, response, body) {
 
@@ -55,7 +55,7 @@ Channel.prototype.getFeed = function () {
  */
 Channel.prototype.getArticleUrls = function(html) {
 
-    console.log('getArticleUrls()');
+    // console.log('getArticleUrls()');
 
     var urls = [];
     var $$ = cheerio.load(html, { xmlMode: this.isXml });

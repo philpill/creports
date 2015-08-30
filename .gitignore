@@ -37,3 +37,6 @@ static/
 
 # DB files
 data/
+
+# Logs
+logs/

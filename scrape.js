@@ -2,11 +2,20 @@ var config = require('./config'),
     q = require('q'),
     Channel = require('./models/channel'),
     Article = require('./models/article'),
-    mongojs = require('mongojs');
+    mongojs = require('mongojs'),
+    winston = require('winston');
 
 var db = mongojs('creports');
 
+// implement this: http://thottingal.in/blog/2014/04/06/winston-nodejs-logging/
 function scrape () {
+
+    var logger = new (winston.Logger)({
+        transports: [
+            new (winston.transports.Console)(),
+            new (winston.transports.File)({ filename: 'logs/scrape/' + Date.now() + '.log' })
+        ]
+    });
 
     // console.log('scrape.scrape()');
 
@@ -22,6 +31,8 @@ function scrape () {
 
             return;
         }
+
+        logger.log('info', 'SCRAPE CHANNEL', { name : data.name, url : data.url });
 
         channel = new Channel(data.url, data.articleUrl, data.isXml, data.isUrlAttribute);
 
@@ -43,14 +54,21 @@ function scrape () {
                         .then(article.format.bind(article))
                         .then(article.interpret.bind(article))
                         .then(function () {
-                            console.log(article.url);
-                            console.log(article.data.headline);
-                            console.log('WAR:', article.isConflict ? '\033[31mtrue\033[0m' : 'false');
+                            // console.log(article.url);
+                            // console.log(article.data.headline);
+                            // console.log('WAR:', article.isConflict ? '\033[31mtrue\033[0m' : 'false');
+
+                            // logger.log('info', 'SCRAPE ARTICLE', { url : url, isConflict : article.isConflict });
+
+                            if (article.isConflict) {
+
+                                logger.log('info', 'CONFLICT', { url : url, headline : article.data.headline });
+                            }
 
                             articles.insert(article);
                         });
                     } else {
-                        console.log('scraped: ', url);
+                        // console.log('scraped: ', url);
                     }
                 });
             });
