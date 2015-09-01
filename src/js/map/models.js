@@ -19,20 +19,43 @@
             height : 0,
             width : 0
         },
-        incrementZoom : function (zoom) {
+        getModifier : function (zoom) {
+
+            return 1 + 0.3 * zoom;
+        },
+        setZoom : function (newZoom) {
 
             console.log('setZoom()');
 
-            console.log(zoom);
+            var modifier = this.getModifier(newZoom),
+
+            newHeight = this.get('originalHeight')*modifier,
+            newWidth = this.get('originalWidth')*modifier;
+
+            console.log('originalHeight ', this.get('originalHeight'));
+            console.log('originalWidth ', this.get('originalWidth'));
+            console.log('newHeight ', newHeight);
+            console.log('newWidth ', newWidth);
+            console.log('newZoom ', newZoom);
+
+            this.set({
+                height : newHeight,
+                width : newWidth,
+                zoom : newZoom
+            });
+        },
+        incrementZoom : function (zoom) {
+
+            console.log('setZoom()');
 
             var newZoom = this.get('zoom') + zoom;
 
             newZoom = newZoom < 0 ? 0 : newZoom;
             newZoom = newZoom > 10 ? 10 : newZoom;
 
-            this.set({
-                zoom : newZoom
-            });
+            console.log(newZoom);
+
+            this.setZoom(newZoom);
         }
     });
 

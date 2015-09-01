@@ -20,7 +20,7 @@
 
             var zoom = $(e.currentTarget).data('zoom');
 
-            this.model.set({ zoom : zoom });
+            this.model.setZoom(zoom);
         },
 
         clickZoomButton : function (e) {
@@ -31,8 +31,6 @@
         },
 
         clickNav : function (e) {
-
-            console.log('clickNav()');
 
             var $currentTarget = $(e.currentTarget);
 
@@ -45,20 +43,10 @@
             var x = Math.round((offsetX/width)*100);
             var y = Math.round((offsetY/height)*100);
 
-            // console.log($currentTarget);
-            // console.log('offsetX ', offsetX);
-            // console.log('offsetY ', offsetY);
-            // console.log('height ', height);
-            // console.log('width ', width);
-            // console.log('positionX ', Math.round((offsetX/width)*100));
-            // console.log('positionY ', Math.round((offsetY/height)*100));
-
             this.model.set({
                 x : x,
                 y : y
             });
-
-            // Backbone.trigger('nav:click', { x : x, y : y });
         },
 
         onModelChange : function (e) {
@@ -98,7 +86,6 @@
                 top : (top > maxTop ? maxTop : top) + '%',
                 left : (left > maxLeft ? maxLeft : left) + '%'
             });
-
         },
 
         updateSources : function () {

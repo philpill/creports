@@ -14,9 +14,9 @@
 
     var view = Marionette.LayoutView.extend({
 
-        template: _.template(''),
+        template: '#MapTemplate',
 
-        id : 'Map',
+        className : 'mapContainer',
 
         initialize: function () {
 
@@ -45,7 +45,7 @@
 
             this.listenTo(Backbone, 'sources:updated', function (articles) { that.clearData(); that.updateMap(articles); });
 
-            this.model.on('change:x change:y change:zoom', this.onModelChange.bind(this));
+            this.model.on('change:x change:y change:zoom', this.onModelChange, this);
         },
 
         onModelChange : function (e) {
@@ -57,45 +57,56 @@
 
         resizeMap : function () {
 
-            var zoom = this.model.get('zoom'),
-                modifier = 1 + 0.3 * zoom,
+            console.log('resizeMap()');
 
-                height = this.model.get('originalHeight')*modifier,
-                width = this.model.get('originalWidth')*modifier;
+            var height = this.model.get('height'),
+                width = this.model.get('width');
 
-            this.model.set({
-                width : width,
-                height : height
-            });
+            this.$container.height(height);
+            this.$container.width(width);
 
-            this.$el.height(height);
-            this.$el.width(width);
+            console.log('height ', height);
+            console.log('width ', width);
 
             this.map.resize();
         },
 
         repositionMap : function () {
 
+            var height = this.model.get('height'),
+                width = this.model.get('width');
+
             var x = this.model.get('x'),
                 y = this.model.get('y');
 
-            // var $parent = this.$el.parent();
+            var containerHeight = this.$container.height(),
+                containerWidth = this.$container.width();
 
-            // var top = -((this.$el.innerHeight()/100)*y),
-            //     left = -((this.$el.innerWidth()/100)*x);
+            var marginTop = (y/100)*containerHeight,
+                marginLeft = (x/100)*containerWidth;
 
-            // console.log('this.$el.innerHeight() ', this.$el.innerHeight());
-            // console.log('this.$el.innerWidth() ', this.$el.innerWidth());
+            var maxLeft = width - this.model.get('originalWidth'),
+                maxTop = height - this.model.get('originalHeight');
 
-            // console.log('x ', x);
-            // console.log('y ', y);
 
-            // console.log('top ', top);
-            // console.log('left ', left);
+            // console.log('containerWidth ', containerWidth);
+            // console.log('containerHeight ', containerHeight);
+
+            // console.log('width ', width);
+            // console.log('height ', height);
+
+            // console.log('maxLeft ', maxLeft);
+            // console.log('maxTop ', maxTop);
+            // console.log('marginLeft ', marginLeft);
+            // console.log('marginTop ', marginTop);
+
+            marginLeft = marginLeft < maxLeft ? marginLeft : maxLeft;
+            marginTop = marginTop < maxTop ? marginTop : maxTop;
+
 
             this.$el.css({
-                'margin-top' : -y + '%',
-                'margin-left' : -x + '%'
+                'margin-top' : -marginTop,
+                'margin-left' : -marginLeft
             });
 
         },
@@ -114,16 +125,22 @@
 
         onShow: function () {
 
+            this.$container = $('.mapContainer');
+
             this.map = this.createMap($('#Map')[0]);
 
             this.updateMap(articles);
-
         },
 
         setModelDimensions : function () {
 
-            var height = $('#Map').outerHeight(),
-                width = $('#Map').outerWidth();
+            console.log('setModelDimensions()');
+
+            var height = this.$container.outerHeight(),
+                width = this.$container.outerWidth();
+
+            console.log('height ', height);
+            console.log('width ', width);
 
             this.model.set({
                 originalWidth : width,

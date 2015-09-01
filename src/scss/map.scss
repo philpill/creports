@@ -1,7 +1,6 @@
 .region-map {
     margin-bottom: 20px;
     overflow: hidden;
-    max-height: 80vh;
 }
 
 @media (min-width: 1024px) {
@@ -13,6 +12,5 @@
 }
 
 #Map {
-    width: 100%;
-    position: absolute;
+
 }
