@@ -7,7 +7,8 @@
         Marionette = require('backbone.marionette.min'),
         map = require('./map/views'),
         article = require('./articles/views'),
-        controls = require('./controls/views');
+        controls = require('./controls/views'),
+        models = require('./map/models');
 
     var app = new Marionette.Application();
 
@@ -29,11 +30,13 @@
 
             console.log(articles);
 
-            app.mapRegion.show(new map());
+            var mapModel = new models.map();
+
+            app.mapRegion.show(new map({ model : mapModel }));
 
             app.articlesRegion.show(new article());
 
-            app.controlsRegion.show(new controls());
+            app.controlsRegion.show(new controls({ model : mapModel }));
         });
     });
 

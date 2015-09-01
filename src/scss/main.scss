@@ -63,6 +63,21 @@ ul {
     }
 }
 
+.pulse {
+    animation-name: pulse;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/* http://stackoverflow.com/a/880518 */
+.noSelection {
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
 #Container {
     min-width: 800px;
     margin: 20px;

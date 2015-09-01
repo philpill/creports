@@ -1,7 +1,7 @@
 {
   "name": "creports",
-  "description": "Graphical visualisation of conflicts reported around the world",
-  "version": "0.1.0",
+  "description": "Graphical visualisation of violence reported around the world",
+  "version": "0.2.0",
   "private": true,
   "ref": [
     "https://github.com/substack/node-browserify#browser-field",

@@ -44,7 +44,62 @@
             console.log(that.countries);
 
             this.listenTo(Backbone, 'sources:updated', function (articles) { that.clearData(); that.updateMap(articles); });
+
+            this.model.on('change:x change:y change:zoom', this.onModelChange.bind(this));
         },
+
+        onModelChange : function (e) {
+
+            this.resizeMap();
+
+            this.repositionMap();
+        },
+
+        resizeMap : function () {
+
+            var zoom = this.model.get('zoom'),
+                modifier = 1 + 0.3 * zoom,
+
+                height = this.model.get('originalHeight')*modifier,
+                width = this.model.get('originalWidth')*modifier;
+
+            this.model.set({
+                width : width,
+                height : height
+            });
+
+            this.$el.height(height);
+            this.$el.width(width);
+
+            this.map.resize();
+        },
+
+        repositionMap : function () {
+
+            var x = this.model.get('x'),
+                y = this.model.get('y');
+
+            // var $parent = this.$el.parent();
+
+            // var top = -((this.$el.innerHeight()/100)*y),
+            //     left = -((this.$el.innerWidth()/100)*x);
+
+            // console.log('this.$el.innerHeight() ', this.$el.innerHeight());
+            // console.log('this.$el.innerWidth() ', this.$el.innerWidth());
+
+            // console.log('x ', x);
+            // console.log('y ', y);
+
+            // console.log('top ', top);
+            // console.log('left ', left);
+
+            this.$el.css({
+                'margin-top' : -y + '%',
+                'margin-left' : -x + '%'
+            });
+
+        },
+
         onRender: function () {
 
             var articleCollection = new articlesCollection.articles(articles);
@@ -62,6 +117,20 @@
             this.map = this.createMap($('#Map')[0]);
 
             this.updateMap(articles);
+
+        },
+
+        setModelDimensions : function () {
+
+            var height = $('#Map').outerHeight(),
+                width = $('#Map').outerWidth();
+
+            this.model.set({
+                originalWidth : width,
+                originalHeight : height,
+                height : height,
+                width : width
+            });
         },
 
         clearData : function () {
@@ -112,6 +181,8 @@
                 done: function(datamap) {
 
                     datamap.svg.selectAll('.datamaps-subunit').on('click', that.onDatamapCountryClick.bind(that));
+
+                    that.setModelDimensions();
                 }
             };
 

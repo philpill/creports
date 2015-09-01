@@ -1,4 +1,5 @@
 .region-controls {
+    @extend .noSelection;
     display: inline-block;
     margin: 0 0 20px 0;
     padding: 20px;
@@ -28,12 +29,7 @@
     margin-right: 5px;
 
     &:hover {
-        cursor: pointer;
-        animation-name: pulse;
-        animation-duration: 0.5s;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-        animation-delay: 0.5s
+        @extend .pulse;
     }
 }
 
@@ -79,9 +75,21 @@
 }
 
 #Nav {
+    position: relative;
     display: inline-block;
     width: 80%;
     border: 1px solid $green;
+    svg {
+        pointer-events: none;
+    }
+}
+
+.viewfinder {
+    border: 1px solid $green;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
     pointer-events: none;
 }
 
@@ -96,12 +104,7 @@
     height: 5px;
     margin: 5px;
     &:hover {
-        cursor: pointer;
-        animation-name: pulse;
-        animation-duration: 0.5s;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-        animation-delay: 0.5s
+        @extend .pulse;
     }
 }
 
@@ -112,11 +115,6 @@
     text-align: center;
     margin: 5px;
     &:hover {
-        cursor: pointer;
-        animation-name: pulse;
-        animation-duration: 0.5s;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-        animation-delay: 0.5s
+        @extend .pulse;
     }
 }

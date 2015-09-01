@@ -1,12 +1,13 @@
 script#ControlsTemplate(type="text/template")
     div.nav
         div.navControls
-            a.zoomIn.zoomButton +
+            a.zoomButton(data-zoom-increment='1') +
             ul.zoomLevel
-                - for (var i = 0; i < 10; i++)
+                - for (var i = 10; i > 0; i--)
                     li(data-zoom='#{i}')
-            a.zoomOut.zoomButton -
+            a.zoomButton(data-zoom-increment='-1') -
         div#Nav
+            div.viewfinder
     ul.sources
         - for (var i = 0; i < sources.length; i++)
             li
