@@ -1,8 +1,7 @@
 (function (document, articles) {
 
     var $ = require('jquery.min'),
-        _ = require('lodash.min'),
-        React = require('react.min'),
+        _ = require('lodash'),
         Backbone = require('backbone-min'),
         Marionette = require('backbone.marionette.min'),
         models = require('./models'),

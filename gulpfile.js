@@ -14,9 +14,9 @@ var PATH = {
     input : './src/js/**/*.js',
     outputPath : './static/js/',
     outputFile : 'creports.js',
-    lib : './bower_components/',
-    watchJS : ['src/js/**', 'bower_components/**/*.js'],
-    watchSCSS : ['bower_components/**/*.{sass,css}', 'src/scss/**/*.scss'],
+    lib : './node_modules/',
+    watchJS : ['src/js/**', 'node_modules/**/*.js'],
+    watchSCSS : ['node_modules/**/*.{sass,css}', 'src/scss/**/*.scss'],
 }
 
 var libs = [
@@ -27,8 +27,7 @@ var libs = [
     PATH.lib + 'lodash',
     PATH.lib + 'normalize.css',
     PATH.lib + 'backbone',
-    PATH.lib + 'marionette/lib',
-    PATH.lib + 'react'
+    PATH.lib + 'backbone.marionette/lib'
 ];
 
 gulp.task('watch', function () {
