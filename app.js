@@ -1,9 +1,10 @@
 var express = require('express'),
     app = express(),
     q = require('q'),
-    config = require('./config');
-
-var controllers = require('./controllers'),
+    config = require('./config'),
+    glob = require('glob'),
+    fs = require('fs'),
+    controllers = require('./controllers'),
     scrape = require('./scrape');
 
 app.set('views', './views');
@@ -14,13 +15,24 @@ app.use(controllers)
 
 app.listen(3000);
 
-// check database
+function clearLogs () {
+    glob('logs/**/*.log', function (err, files) {
+        if (!err) {
+            files.forEach(function(file) {
+                fs.unlink(file);
+            });
+        }
+    });
+}
 
 function scrapeLoop () {
-    if (config.scraper && config.scraper.interval) {
-        scrape();
-        setTimeout(scrapeLoop, config.scraper.interval);
-    }
+    clearLogs();
+    setTimeout(function () {
+        if (config.scraper && config.scraper.interval) {
+            scrape();
+            setTimeout(scrapeLoop, config.scraper.interval);
+        }
+    }, 1000);
 }
 
 scrapeLoop();
