@@ -30,7 +30,6 @@ function updateSource {
 function updatePackages {
     echo "- update packages"
     npm install
-    ./node_modules/bower/bin/bower install
 }
 
 function runGulp {
