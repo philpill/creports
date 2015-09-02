@@ -32,7 +32,6 @@ node_modules
 *.swp
 
 # Build files
-bower_components/
 static/
 
 # DB files
